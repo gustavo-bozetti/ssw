@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronLeft, CheckCircle2, XCircle, FileText } from "lucide-react"
+import { ChevronLeft, CheckCircle2, XCircle } from "lucide-react"
 
 interface ResultItem {
   sucesso: boolean
@@ -18,14 +18,19 @@ function Field({ label, name, ...props }: { label: string; name?: string } & Rea
       <input
         name={name}
         {...props}
-        className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] bg-[#F5F6FA] focus:bg-white transition-colors"
+        className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] bg-white transition-colors"
       />
     </div>
   )
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{children}</p>
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">{title}</p>
+      {children}
+    </section>
+  )
 }
 
 export default function NotfisFormDesktop() {
@@ -96,52 +101,52 @@ export default function NotfisFormDesktop() {
 
   return (
     <div className="flex flex-col h-full bg-[#F5F6FA]">
-      <header className="bg-white border-b border-gray-200 shrink-0">
-        <div className="px-8 py-4 flex items-center gap-2">
-          <button onClick={() => router.back()} className="text-gray-400 hover:text-gray-600 transition-colors">
-            <ChevronLeft strokeWidth={1.5} className="w-5 h-5" />
+      {/* header sticky com botão de ação visível */}
+      <header className="bg-white border-b border-gray-200 shrink-0 sticky top-0 z-10">
+        <div className="px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button onClick={() => router.back()} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <ChevronLeft strokeWidth={1.5} className="w-5 h-5" />
+            </button>
+            <span className="text-sm text-gray-400">Ferramentas</span>
+            <span className="text-gray-300">/</span>
+            <span className="text-sm font-semibold text-[#1F1F1F]">Enviar NF-e</span>
+          </div>
+          <button
+            type="submit"
+            form="notfis-form"
+            disabled={loading}
+            className="bg-[#2EA3F2] text-white text-sm font-semibold px-6 py-2.5 rounded-xl disabled:opacity-50 hover:bg-blue-600 transition-colors"
+          >
+            {loading ? "Transmitindo…" : "Transmitir NF-e →"}
           </button>
-          <span className="text-sm text-gray-400">Ferramentas</span>
-          <span className="text-gray-300">/</span>
-          <span className="text-sm font-semibold text-[#1F1F1F]">Enviar NF-e</span>
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="flex flex-1 min-h-0">
+      {/* conteúdo centrado — coluna única larga */}
+      <div className="flex-1 overflow-y-auto py-8">
+        <form id="notfis-form" onSubmit={handleSubmit} className="max-w-2xl mx-auto px-4 space-y-4">
 
-        {/* Coluna esquerda — Remetente + Destinatário */}
-        <div className="flex-1 bg-white border-r border-gray-100 overflow-y-auto p-8 space-y-8">
-
-          <section>
-            <SectionTitle>Remetente</SectionTitle>
+          <Section title="Remetente">
             <div className="grid grid-cols-2 gap-4">
               <Field label="CNPJ" name="cnpjRemetente" placeholder="00.000.000/0001-00" inputMode="numeric" />
-              <Field label="Nome / Razão Social" name="nomeRemetente" placeholder="Empresa origem" />
+              <Field label="Nome / Razão Social" name="nomeRemetente" placeholder="Empresa de origem" />
             </div>
-          </section>
+          </Section>
 
-          <div className="border-t border-gray-100" />
-
-          <section>
-            <SectionTitle>Destinatário</SectionTitle>
+          <Section title="Destinatário">
             <div className="grid grid-cols-2 gap-4">
               <Field label="CNPJ *" name="cnpjDest" placeholder="00.000.000/0001-00" inputMode="numeric" required />
               <Field label="Nome / Razão Social *" name="nomeDest" placeholder="Cliente destino" required />
               <Field label="Telefone" name="telefoneDest" placeholder="(11) 99999-9999" inputMode="tel" />
               <Field label="E-mail" name="emailDest" type="email" placeholder="email@empresa.com" />
             </div>
-          </section>
-
-          <div className="border-t border-gray-100" />
-
-          <section>
-            <SectionTitle>Endereço de entrega</SectionTitle>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="pt-1 grid grid-cols-4 gap-3">
               <div className="col-span-3">
                 <Field label="Rua *" name="ruaDest" placeholder="Nome da rua" required />
               </div>
               <Field label="Número *" name="numeroDest" placeholder="100" required />
-              <Field label="Complemento" name="complementoDest" placeholder="Apto, sala..." />
+              <Field label="Complemento" name="complementoDest" placeholder="Apto, sala…" />
               <Field label="Bairro *" name="bairroDest" placeholder="Centro" required />
               <div className="col-span-2">
                 <Field label="Cidade *" name="cidadeDest" placeholder="São Paulo" required />
@@ -149,18 +154,13 @@ export default function NotfisFormDesktop() {
               <Field label="UF *" name="ufDest" placeholder="SP" maxLength={2} required />
               <Field label="CEP *" name="cepDest" placeholder="00000-000" inputMode="numeric" required />
             </div>
-          </section>
-        </div>
+          </Section>
 
-        {/* Coluna direita — Nota Fiscal + Ação + Resultado */}
-        <div className="w-[380px] shrink-0 bg-white overflow-y-auto flex flex-col">
-          <div className="flex-1 p-8 space-y-5">
-            <SectionTitle>Nota Fiscal</SectionTitle>
-
-            <div className="grid grid-cols-2 gap-3">
+          <Section title="Nota Fiscal">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1.5">Tipo NF</label>
-                <select name="tipoNF" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] bg-[#F5F6FA]">
+                <select name="tipoNF" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]">
                   <option value="NORMAL">Normal</option>
                   <option value="REVERSA">Reversa</option>
                   <option value="DEVOLUCAO">Devolução</option>
@@ -168,74 +168,56 @@ export default function NotfisFormDesktop() {
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1.5">Condição frete</label>
-                <select name="condicaoFrete" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] bg-[#F5F6FA]">
+                <select name="condicaoFrete" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]">
                   <option value="CIF">CIF — remetente paga</option>
                   <option value="FOB">FOB — destinatário paga</option>
                 </select>
               </div>
             </div>
-
-            <div className="grid grid-cols-3 gap-2">
-              <div className="col-span-2">
+            <div className="grid grid-cols-4 gap-3">
+              <div className="col-span-3">
                 <Field label="Número NF *" name="nfNumero" placeholder="000000" inputMode="numeric" required />
               </div>
               <Field label="Série *" name="nfSerie" placeholder="1" required defaultValue="1" />
             </div>
-
-            <Field label="Chave NF-e (44 dígitos)" name="chaveNFe" placeholder="Opcional" inputMode="numeric" maxLength={44} />
-            <Field label="Data de emissão * (DD/MM/AAAA)" name="dataEmissao" placeholder="22/09/2026" required />
-
-            <div className="grid grid-cols-2 gap-3">
+            <Field label="Chave NF-e" name="chaveNFe" placeholder="44 dígitos (opcional)" inputMode="numeric" maxLength={44} />
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Data de emissão * (DD/MM/AAAA)" name="dataEmissao" placeholder="22/09/2026" required />
+              <Field label="Nº pedido" name="pedido" placeholder="Opcional" />
+            </div>
+            <div className="grid grid-cols-3 gap-3">
               <Field label="Volumes *" name="qtdeVolumes" type="number" placeholder="1" inputMode="numeric" min="1" required defaultValue="1" />
               <Field label="Peso real (kg) *" name="pesoReal" type="number" placeholder="0.0" inputMode="decimal" step="0.001" required />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label="Valor mercadoria (R$) *" name="valorMercadoria" type="number" placeholder="0,00" inputMode="decimal" step="0.01" required />
               <Field label="Cubagem (m³)" name="cubagem" type="number" placeholder="Opcional" inputMode="decimal" step="0.0001" />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label="Nº pedido" name="pedido" placeholder="Opcional" />
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Valor mercadoria (R$) *" name="valorMercadoria" type="number" placeholder="0,00" inputMode="decimal" step="0.01" required />
               <Field label="Valor frete (R$)" name="valorFrete" type="number" placeholder="Opcional" inputMode="decimal" step="0.01" />
             </div>
-          </div>
+          </Section>
 
-          {/* Área de ação e resultado — sticky no fundo */}
-          <div className="shrink-0 border-t border-gray-100 p-6 space-y-3">
-            {erro && (
-              <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">{erro}</div>
-            )}
-            {resultados && resultados.map((r, i) => (
-              <div key={i} className={`rounded-xl border p-4 ${r.sucesso ? "bg-emerald-50 border-emerald-100" : "bg-red-50 border-red-100"}`}>
-                <div className="flex items-center gap-2 mb-1">
-                  {r.sucesso
-                    ? <CheckCircle2 strokeWidth={1.5} className="w-4 h-4 text-emerald-600 shrink-0" />
-                    : <XCircle strokeWidth={1.5} className="w-4 h-4 text-red-500 shrink-0" />
-                  }
-                  <span className={`font-semibold text-sm ${r.sucesso ? "text-emerald-800" : "text-red-700"}`}>
-                    {r.sucesso ? "NF transmitida com sucesso" : `Falha — NF ${r.notaFiscal || "—"}`}
-                  </span>
-                </div>
-                <p className={`text-xs mt-1 ${r.sucesso ? "text-emerald-600" : "text-red-600"}`}>{r.mensagem}</p>
-                {r.protocolo && <p className="text-xs text-gray-400 mt-1.5 font-mono">Protocolo: {r.protocolo}</p>}
+          {/* resultado */}
+          {erro && (
+            <div className="bg-red-50 border border-red-200 rounded-2xl px-5 py-4 text-sm text-red-700">{erro}</div>
+          )}
+          {resultados && resultados.map((r, i) => (
+            <div key={i} className={`rounded-2xl border p-5 ${r.sucesso ? "bg-emerald-50 border-emerald-100" : "bg-red-50 border-red-100"}`}>
+              <div className="flex items-center gap-2.5 mb-1.5">
+                {r.sucesso
+                  ? <CheckCircle2 strokeWidth={1.5} className="w-5 h-5 text-emerald-600 shrink-0" />
+                  : <XCircle strokeWidth={1.5} className="w-5 h-5 text-red-500 shrink-0" />
+                }
+                <span className={`font-semibold ${r.sucesso ? "text-emerald-800" : "text-red-700"}`}>
+                  {r.sucesso ? "NF-e transmitida com sucesso" : `Falha na transmissão — NF ${r.notaFiscal || "—"}`}
+                </span>
               </div>
-            ))}
-            {!resultados && !erro && (
-              <div className="flex items-center gap-3 text-gray-400 px-1">
-                <FileText strokeWidth={1} className="w-5 h-5 shrink-0" />
-                <p className="text-sm">Preencha os dados e envie a NF-e</p>
-              </div>
-            )}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#2EA3F2] text-white font-semibold py-3 rounded-xl disabled:opacity-50 hover:bg-blue-600 transition-colors"
-            >
-              {loading ? "Transmitindo…" : "Transmitir NF-e para SSW →"}
-            </button>
-          </div>
-        </div>
+              <p className={`text-sm ${r.sucesso ? "text-emerald-600" : "text-red-600"}`}>{r.mensagem}</p>
+              {r.protocolo && <p className="text-xs text-gray-400 mt-2 font-mono">Protocolo: {r.protocolo}</p>}
+            </div>
+          ))}
 
-      </form>
+        </form>
+      </div>
     </div>
   )
 }
