@@ -166,7 +166,7 @@ export default function EntregaDetalhe({ id }: { id: string }) {
         </div>
       </header>
 
-      <main className="max-w-lg lg:max-w-7xl mx-auto px-4 lg:px-8 py-4 lg:py-8">
+      <main className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4 lg:py-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start space-y-3 lg:space-y-0">
           {/* col 1: destinatário, carga, dados do pedido */}
           <div className="space-y-3">

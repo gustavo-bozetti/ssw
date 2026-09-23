@@ -20,7 +20,7 @@ export default function EntregasList() {
   return (
     <div className="min-h-screen bg-[#F3F3F3]">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-lg lg:max-w-7xl mx-auto px-4 lg:px-8 py-4 lg:py-5 flex items-center justify-between">
+        <div className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4 lg:py-5 flex items-center justify-between">
           <div>
             <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">LE Serviços</p>
             <h1 className="text-xl lg:text-2xl font-bold text-[#1F1F1F]">Logística</h1>
@@ -41,9 +41,9 @@ export default function EntregasList() {
       </header>
 
       {/* desktop layout */}
-      <div className="hidden lg:block">
-        <div className="max-w-7xl mx-auto px-8 py-6 space-y-6">
-          <DashboardHeader entregas={entregas} />
+      <div className="hidden lg:flex gap-6 px-8 py-6 items-start min-h-[calc(100vh-73px)]">
+        {/* tabela ocupa todo o espaço restante */}
+        <div className="flex-1 min-w-0">
           {loading ? (
             <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center text-gray-400">
               Carregando…
@@ -51,6 +51,10 @@ export default function EntregasList() {
           ) : (
             <EntregaTable entregas={entregas} onSelect={(e) => router.push(`/entregas/${e.id}`)} />
           )}
+        </div>
+        {/* painel de KPIs vertical fixo à direita */}
+        <div className="w-56 shrink-0">
+          <DashboardHeader entregas={entregas} />
         </div>
       </div>
 

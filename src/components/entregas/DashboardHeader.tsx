@@ -1,5 +1,24 @@
-import StatCard from "@/components/ui/StatCard"
 import type { Entrega } from "@/lib/storage/types"
+
+const DOT: Record<string, string> = {
+  blue:  "bg-blue-400",
+  green: "bg-emerald-400",
+  amber: "bg-amber-400",
+  red:   "bg-red-400",
+  gray:  "bg-gray-300",
+}
+
+function StatRow({ label, value, color = "gray" }: { label: string; value: string | number; color?: string }) {
+  return (
+    <div className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
+      <div className="flex items-center gap-2">
+        <span className={`w-2 h-2 rounded-full shrink-0 ${DOT[color] ?? DOT.gray}`} />
+        <span className="text-sm text-gray-600">{label}</span>
+      </div>
+      <span className="text-sm font-bold text-[#1F1F1F] tabular-nums">{value}</span>
+    </div>
+  )
+}
 
 export default function DashboardHeader({ entregas }: { entregas: Entrega[] }) {
   const total = entregas.length
@@ -9,18 +28,14 @@ export default function DashboardHeader({ entregas }: { entregas: Entrega[] }) {
   const taxa = total > 0 ? Math.round((entregues / total) * 100) : 0
 
   return (
-    <div>
-      <p className="hidden lg:block text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Visão geral</p>
-      <div className="grid grid-cols-2 xl:grid-cols-5 gap-3 lg:gap-4 mb-6">
-        <StatCard label="Total" value={total} color="gray" />
-        <StatCard label="Em rota" value={emRota} color="blue" />
-        <StatCard label="Entregues" value={entregues} color="green" />
-        <StatCard label="Pendentes" value={pendentes} color="amber" />
-        <StatCard
-          label="Taxa de entrega"
-          value={`${taxa}%`}
-          color={taxa >= 80 ? "green" : taxa >= 50 ? "amber" : "red"}
-        />
+    <div className="bg-white rounded-2xl border border-gray-100 p-4">
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Visão geral</p>
+      <p className="text-3xl font-bold text-[#1F1F1F] mb-3">{total}</p>
+      <div>
+        <StatRow label="Em rota"    value={emRota}     color="blue"  />
+        <StatRow label="Entregues"  value={entregues}  color="green" />
+        <StatRow label="Pendentes"  value={pendentes}  color="amber" />
+        <StatRow label="Taxa"       value={`${taxa}%`} color={taxa >= 80 ? "green" : taxa >= 50 ? "amber" : "red"} />
       </div>
     </div>
   )
