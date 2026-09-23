@@ -114,9 +114,9 @@ export default function EntregaDetalhe({ id }: { id: string }) {
   const v = VEICULO_CONFIG[entrega.tipoVeiculo]
 
   return (
-    <div className="min-h-screen bg-[#F3F3F3] pb-32">
+    <div className="min-h-screen bg-[#F3F3F3] pb-32 lg:pb-8">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-lg mx-auto px-4 py-4">
+        <div className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4">
           <div className="flex items-center gap-3">
             <button onClick={() => router.back()} className="text-gray-500 p-1">
               <ChevronLeft strokeWidth={1.5} className="w-6 h-6" />
@@ -130,52 +130,78 @@ export default function EntregaDetalhe({ id }: { id: string }) {
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-4 space-y-3">
-        {entrega.mensagemSsw && (
-          <div className={`flex items-start gap-3 rounded-2xl px-4 py-3.5 ${entrega.erroSsw === 0 ? "bg-emerald-50 border border-emerald-100" : "bg-amber-50 border border-amber-100"}`}>
-            {entrega.erroSsw === 0
-              ? <CheckCircle2 strokeWidth={1.5} className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-              : <AlertCircle strokeWidth={1.5} className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-            }
-            <div>
-              <p className={`text-sm font-semibold ${entrega.erroSsw === 0 ? "text-emerald-800" : "text-amber-800"}`}>
-                {entrega.erroSsw === 0 ? "Coleta registrada na SSW" : "Aviso da transportadora"}
-              </p>
-              <p className={`text-xs mt-0.5 ${entrega.erroSsw === 0 ? "text-emerald-600" : "text-amber-700"}`}>
-                {entrega.mensagemSsw}
-              </p>
-            </div>
+      {/* desktop action bar inline (below header) */}
+      <div className="hidden lg:flex max-w-none px-8 py-4 gap-3 bg-white border-b border-gray-100">
+        <button
+          onClick={rastrear}
+          disabled={rastreando}
+          className="border-2 border-[#2D3940] text-[#2D3940] font-semibold px-6 py-2.5 rounded-2xl text-sm disabled:opacity-50 hover:bg-gray-50"
+        >
+          {rastreando ? "…" : "Rastrear"}
+        </button>
+        <button
+          onClick={() => setShowAgendamento(true)}
+          className="bg-[#2EA3F2] text-white font-semibold px-6 py-2.5 rounded-2xl text-sm hover:bg-blue-600"
+        >
+          Agendar
+        </button>
+        <button
+          onClick={() => setShowOcorrencia(true)}
+          className="bg-[#FF6900] text-white font-semibold px-6 py-2.5 rounded-2xl text-sm hover:bg-orange-600"
+        >
+          Ocorrência
+        </button>
+      </div>
+
+      <main className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4 lg:py-6">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-6 lg:items-start space-y-3 lg:space-y-0">
+          {/* col 1: destinatário, carga, dados do pedido */}
+          <div className="space-y-3">
+            {entrega.mensagemSsw && (
+              <div className={`flex items-start gap-3 rounded-2xl px-4 py-3.5 ${entrega.erroSsw === 0 ? "bg-emerald-50 border border-emerald-100" : "bg-amber-50 border border-amber-100"}`}>
+                {entrega.erroSsw === 0
+                  ? <CheckCircle2 strokeWidth={1.5} className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  : <AlertCircle strokeWidth={1.5} className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                }
+                <div>
+                  <p className={`text-sm font-semibold ${entrega.erroSsw === 0 ? "text-emerald-800" : "text-amber-800"}`}>
+                    {entrega.erroSsw === 0 ? "Coleta registrada na SSW" : "Aviso da transportadora"}
+                  </p>
+                  <p className={`text-xs mt-0.5 ${entrega.erroSsw === 0 ? "text-emerald-600" : "text-amber-700"}`}>
+                    {entrega.mensagemSsw}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <InfoCard title="Destinatário">
+              <Row label="Nome" value={entrega.nomeDestinatario} />
+              {entrega.cnpjDestinatario && <Row label="CNPJ" value={entrega.cnpjDestinatario} />}
+              {entrega.cpfDestinatario && <Row label="CPF" value={entrega.cpfDestinatario} />}
+              <Row label="CEP" value={entrega.cepEntrega} />
+              {entrega.enderecoEntrega && <Row label="Endereço" value={entrega.enderecoEntrega} />}
+            </InfoCard>
+
+            <InfoCard title="Carga">
+              <Row label="Veículo" value={v.label} />
+              <Row label="Peso" value={`${entrega.peso} kg`} />
+              <Row label="Volumes" value={String(entrega.quantidade)} />
+              {entrega.mercadoria && <Row label="Mercadoria" value={entrega.mercadoria} />}
+              {entrega.valorMercadoria && <Row label="Valor" value={`R$ ${entrega.valorMercadoria.toFixed(2)}`} />}
+            </InfoCard>
+
+            {(entrega.numeroColeta || entrega.chaveNfe || entrega.numeroNf || entrega.pedido) && (
+              <InfoCard title="Dados do pedido">
+                {entrega.numeroColeta && <Row label="Nº coleta SSW" value={`#${entrega.numeroColeta}`} mono />}
+                {entrega.chaveNfe && <Row label="Chave NF-e" value={entrega.chaveNfe} mono />}
+                {entrega.numeroNf && <Row label="Número NF" value={entrega.numeroNf} />}
+                {entrega.pedido && <Row label="Pedido" value={entrega.pedido} />}
+              </InfoCard>
+            )}
           </div>
-        )}
 
-        {/* destinatário */}
-        <InfoCard title="Destinatário">
-          <Row label="Nome" value={entrega.nomeDestinatario} />
-          {entrega.cnpjDestinatario && <Row label="CNPJ" value={entrega.cnpjDestinatario} />}
-          {entrega.cpfDestinatario && <Row label="CPF" value={entrega.cpfDestinatario} />}
-          <Row label="CEP" value={entrega.cepEntrega} />
-          {entrega.enderecoEntrega && <Row label="Endereço" value={entrega.enderecoEntrega} />}
-        </InfoCard>
-
-        {/* carga */}
-        <InfoCard title="Carga">
-          <Row label="Veículo" value={v.label} />
-          <Row label="Peso" value={`${entrega.peso} kg`} />
-          <Row label="Volumes" value={String(entrega.quantidade)} />
-          {entrega.mercadoria && <Row label="Mercadoria" value={entrega.mercadoria} />}
-          {entrega.valorMercadoria && <Row label="Valor" value={`R$ ${entrega.valorMercadoria.toFixed(2)}`} />}
-        </InfoCard>
-
-        {/* documento / coleta */}
-        {(entrega.numeroColeta || entrega.chaveNfe || entrega.numeroNf || entrega.pedido) && (
-          <InfoCard title="Dados do pedido">
-            {entrega.numeroColeta && <Row label="Nº coleta SSW" value={`#${entrega.numeroColeta}`} mono />}
-            {entrega.chaveNfe && <Row label="Chave NF-e" value={entrega.chaveNfe} mono />}
-            {entrega.numeroNf && <Row label="Número NF" value={entrega.numeroNf} />}
-            {entrega.pedido && <Row label="Pedido" value={entrega.pedido} />}
-          </InfoCard>
-        )}
-
+          {/* col 2: rastreamento, etiquetas */}
+          <div className="space-y-3">
         {/* rastreamento */}
         <div className="bg-white rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-2">
@@ -307,25 +333,29 @@ export default function EntregaDetalhe({ id }: { id: string }) {
           </div>
         )}
 
-        {sucessoOcorrencia && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-sm text-emerald-700 text-center font-medium">
-            Ocorrência registrada — {sucessoOcorrencia}
-          </div>
-        )}
+            {sucessoOcorrencia && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-sm text-emerald-700 text-center font-medium">
+                Ocorrência registrada — {sucessoOcorrencia}
+              </div>
+            )}
 
-        {sucessoAgendamento && (
-          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-700 text-center font-medium">
-            Entrega agendada — {sucessoAgendamento}
-          </div>
-        )}
+            {sucessoAgendamento && (
+              <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-700 text-center font-medium">
+                Entrega agendada — {sucessoAgendamento}
+              </div>
+            )}
 
-        <p className="text-xs text-gray-400 text-center py-2">
-          Criada em {new Date(entrega.createdAt).toLocaleString("pt-BR")}
-        </p>
+            <p className="text-xs text-gray-400 text-center py-2">
+              Criada em {new Date(entrega.createdAt).toLocaleString("pt-BR")}
+            </p>
+          </div>
+          {/* end col 2 */}
+        </div>
+        {/* end grid */}
       </main>
 
-      {/* fixed action bar above bottom nav */}
-      <div className="fixed bottom-[72px] left-0 right-0 z-30 bg-white border-t border-gray-100 px-4 py-3 shadow-lg">
+      {/* fixed action bar above bottom nav — mobile only */}
+      <div className="lg:hidden fixed bottom-[72px] left-0 right-0 z-30 bg-white border-t border-gray-100 px-4 py-3 shadow-lg">
         <div className="max-w-lg mx-auto flex gap-2">
           <button
             onClick={rastrear}

@@ -17,7 +17,7 @@ export default function BottomNav() {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#2D3940] safe-area-pb">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#2D3940] safe-area-pb lg:hidden">
         <div className="max-w-lg mx-auto flex items-end justify-around px-2 pt-2 pb-3">
           <NavTab href="/entregas" active={isEntregas} icon={<Package strokeWidth={1.5} className="w-6 h-6" />} label="Entregas" />
 

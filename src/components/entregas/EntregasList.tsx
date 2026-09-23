@@ -1,12 +1,16 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEntregas } from "@/hooks/useEntregas"
 import { VEICULO_CONFIG } from "./config"
 import StatusBadge from "@/components/ui/StatusBadge"
+import DashboardHeader from "./DashboardHeader"
+import EntregaTable from "./EntregaTable"
 import { Package, Truck, CheckCircle2, ChevronRight } from "lucide-react"
 
 export default function EntregasList() {
+  const router = useRouter()
   const { entregas, loading } = useEntregas()
 
   const total = entregas.length
@@ -16,7 +20,7 @@ export default function EntregasList() {
   return (
     <div className="min-h-screen bg-[#F3F3F3]">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-lg mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4 flex items-center justify-between">
           <div>
             <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">LE Serviços</p>
             <h1 className="text-xl font-bold text-[#1F1F1F]">Logística</h1>
@@ -27,7 +31,20 @@ export default function EntregasList() {
         </div>
       </header>
 
-      <main className="max-w-lg mx-auto px-4 py-4 space-y-4">
+      {/* desktop layout */}
+      <div className="hidden lg:block px-8 py-6">
+        <DashboardHeader entregas={entregas} />
+        {loading ? (
+          <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center text-gray-400">
+            Carregando…
+          </div>
+        ) : (
+          <EntregaTable entregas={entregas} onSelect={(e) => router.push(`/entregas/${e.id}`)} />
+        )}
+      </div>
+
+      {/* mobile layout */}
+      <main className="lg:hidden max-w-lg mx-auto px-4 py-4 space-y-4">
         {/* stats hero */}
         <div className="bg-[#2D3940] rounded-2xl p-5">
           <p className="text-xs text-gray-400 mb-3 uppercase tracking-wide">Resumo</p>

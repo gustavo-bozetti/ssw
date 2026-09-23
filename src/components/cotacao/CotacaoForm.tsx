@@ -71,47 +71,53 @@ export default function CotacaoForm() {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="max-w-lg mx-auto px-4 py-6 space-y-5">
-        <section className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
-          <p className="font-medium text-gray-800">Origem e destino</p>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="CEP origem *" name="cepOrigem" placeholder="00000000" inputMode="numeric" maxLength={9} required />
-            <Field label="CEP destino *" name="cepDestino" placeholder="00000000" inputMode="numeric" maxLength={9} required />
+      <form onSubmit={handleSubmit} className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-6">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start space-y-5 lg:space-y-0">
+          {/* left: inputs */}
+          <div className="space-y-5">
+            <section className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+              <p className="font-medium text-gray-800">Origem e destino</p>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="CEP origem *" name="cepOrigem" placeholder="00000000" inputMode="numeric" maxLength={9} required />
+                <Field label="CEP destino *" name="cepDestino" placeholder="00000000" inputMode="numeric" maxLength={9} required />
+              </div>
+            </section>
+
+            <section className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+              <p className="font-medium text-gray-800">Carga</p>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Peso (kg)" name="peso" type="number" placeholder="0.0" inputMode="decimal" step="0.1" />
+                <Field label="Volume (m³)" name="volume" type="number" placeholder="0.0000" inputMode="decimal" step="0.0001" />
+              </div>
+              <p className="text-xs text-gray-400">Informe pelo menos peso ou volume</p>
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Quantidade *" name="quantidade" type="number" placeholder="1" inputMode="numeric" min="1" required defaultValue="1" />
+                <Field label="Valor NF (R$) *" name="valorNF" type="number" placeholder="0,00" inputMode="decimal" step="0.01" required />
+              </div>
+            </section>
+
+            <section className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+              <p className="font-medium text-gray-800">Pagador</p>
+              <Field label="CNPJ do pagador *" name="cnpjPagador" placeholder="00.000.000/0001-00" inputMode="numeric" required />
+              <Field label="CNPJ remetente" name="cnpjRemetente" placeholder="Opcional" inputMode="numeric" />
+              <Field label="CNPJ destinatário" name="cnpjDestinatario" placeholder="Opcional" inputMode="numeric" />
+            </section>
+
+            {erro && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">{erro}</div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white font-semibold py-3.5 rounded-xl disabled:opacity-50 active:bg-blue-700"
+            >
+              {loading ? "Calculando…" : "Calcular Frete"}
+            </button>
           </div>
-        </section>
 
-        <section className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
-          <p className="font-medium text-gray-800">Carga</p>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Peso (kg)" name="peso" type="number" placeholder="0.0" inputMode="decimal" step="0.1" />
-            <Field label="Volume (m³)" name="volume" type="number" placeholder="0.0000" inputMode="decimal" step="0.0001" />
-          </div>
-          <p className="text-xs text-gray-400">Informe pelo menos peso ou volume</p>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Quantidade *" name="quantidade" type="number" placeholder="1" inputMode="numeric" min="1" required defaultValue="1" />
-            <Field label="Valor NF (R$) *" name="valorNF" type="number" placeholder="0,00" inputMode="decimal" step="0.01" required />
-          </div>
-        </section>
-
-        <section className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
-          <p className="font-medium text-gray-800">Pagador</p>
-          <Field label="CNPJ do pagador *" name="cnpjPagador" placeholder="00.000.000/0001-00" inputMode="numeric" required />
-          <Field label="CNPJ remetente" name="cnpjRemetente" placeholder="Opcional" inputMode="numeric" />
-          <Field label="CNPJ destinatário" name="cnpjDestinatario" placeholder="Opcional" inputMode="numeric" />
-        </section>
-
-        {erro && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">{erro}</div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white font-semibold py-3.5 rounded-xl disabled:opacity-50 active:bg-blue-700"
-        >
-          {loading ? "Calculando…" : "Calcular Frete"}
-        </button>
-
+          {/* right: result */}
+          <div className="space-y-5">
         {/* resultado */}
         {result && result.frete !== null && (
           <div className="bg-white rounded-xl border-2 border-blue-200 p-5">
@@ -158,6 +164,10 @@ export default function CotacaoForm() {
             {result.mensagem || "Não foi possível calcular o frete para este trecho."}
           </div>
         )}
+          </div>
+          {/* end right col */}
+        </div>
+        {/* end grid */}
       </form>
     </div>
   )
