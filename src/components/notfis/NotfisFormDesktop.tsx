@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ChevronLeft, CheckCircle2, XCircle } from "lucide-react"
+import { ChevronLeft, CheckCircle2, XCircle, FileText } from "lucide-react"
 
 interface ResultItem {
   sucesso: boolean
@@ -24,8 +24,8 @@ function Field({ label, name, ...props }: { label: string; name?: string } & Rea
   )
 }
 
-function ColHeader({ title }: { title: string }) {
-  return <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">{title}</p>
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{children}</p>
 }
 
 export default function NotfisFormDesktop() {
@@ -42,7 +42,6 @@ export default function NotfisFormDesktop() {
 
     const fd = new FormData(e.currentTarget)
     const get = (k: string) => (fd.get(k) as string | null)?.trim() || undefined
-
     const cep = parseInt((get("cepDest") ?? "").replace(/\D/g, ""), 10)
 
     const body = {
@@ -97,7 +96,6 @@ export default function NotfisFormDesktop() {
 
   return (
     <div className="flex flex-col h-full bg-[#F5F6FA]">
-      {/* header */}
       <header className="bg-white border-b border-gray-200 shrink-0">
         <div className="px-8 py-4 flex items-center gap-2">
           <button onClick={() => router.back()} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -105,82 +103,60 @@ export default function NotfisFormDesktop() {
           </button>
           <span className="text-sm text-gray-400">Ferramentas</span>
           <span className="text-gray-300">/</span>
-          <span className="text-sm font-semibold text-[#1F1F1F]">Enviar NF-e (NOTFIS)</span>
+          <span className="text-sm font-semibold text-[#1F1F1F]">Enviar NF-e</span>
         </div>
       </header>
 
       <form onSubmit={handleSubmit} className="flex flex-1 min-h-0">
-        {/* col 1 — Remetente + resultado */}
-        <div className="w-[280px] shrink-0 bg-white border-r border-gray-200 overflow-y-auto p-6 flex flex-col gap-6">
-          <div>
-            <ColHeader title="Remetente" />
-            <div className="space-y-3">
-              <Field label="CNPJ Remetente" name="cnpjRemetente" placeholder="00.000.000/0001-00" inputMode="numeric" />
+
+        {/* Coluna esquerda — Remetente + Destinatário */}
+        <div className="flex-1 bg-white border-r border-gray-100 overflow-y-auto p-8 space-y-8">
+
+          <section>
+            <SectionTitle>Remetente</SectionTitle>
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="CNPJ" name="cnpjRemetente" placeholder="00.000.000/0001-00" inputMode="numeric" />
               <Field label="Nome / Razão Social" name="nomeRemetente" placeholder="Empresa origem" />
             </div>
-          </div>
+          </section>
 
-          {(resultados || erro) && (
-            <div className="mt-auto space-y-2">
-              {erro && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{erro}</div>
-              )}
-              {resultados && resultados.map((r, i) => (
-                <div key={i} className={`rounded-xl border p-3 ${r.sucesso ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"}`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    {r.sucesso
-                      ? <CheckCircle2 strokeWidth={1.5} className="w-4 h-4 text-emerald-600 shrink-0" />
-                      : <XCircle strokeWidth={1.5} className="w-4 h-4 text-red-600 shrink-0" />
-                    }
-                    <span className={`font-medium text-xs ${r.sucesso ? "text-emerald-800" : "text-red-800"}`}>
-                      NF {r.notaFiscal || "—"}
-                    </span>
-                  </div>
-                  <p className={`text-xs ${r.sucesso ? "text-emerald-700" : "text-red-700"}`}>{r.mensagem}</p>
-                  {r.protocolo && <p className="text-xs text-gray-500 mt-1 font-mono">Protocolo: {r.protocolo}</p>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+          <div className="border-t border-gray-100" />
 
-        {/* col 2 — Destinatário */}
-        <div className="flex-1 bg-white border-r border-gray-200 overflow-y-auto p-6">
-          <ColHeader title="Destinatário" />
-          <div className="space-y-3">
-            <Field label="CNPJ *" name="cnpjDest" placeholder="00.000.000/0001-00" inputMode="numeric" required />
-            <Field label="Nome / Razão Social *" name="nomeDest" placeholder="Cliente destino" required />
-            <div className="grid grid-cols-2 gap-3">
+          <section>
+            <SectionTitle>Destinatário</SectionTitle>
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="CNPJ *" name="cnpjDest" placeholder="00.000.000/0001-00" inputMode="numeric" required />
+              <Field label="Nome / Razão Social *" name="nomeDest" placeholder="Cliente destino" required />
               <Field label="Telefone" name="telefoneDest" placeholder="(11) 99999-9999" inputMode="tel" />
               <Field label="E-mail" name="emailDest" type="email" placeholder="email@empresa.com" />
             </div>
+          </section>
 
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest pt-2">Endereço</p>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="col-span-2">
+          <div className="border-t border-gray-100" />
+
+          <section>
+            <SectionTitle>Endereço de entrega</SectionTitle>
+            <div className="grid grid-cols-4 gap-3">
+              <div className="col-span-3">
                 <Field label="Rua *" name="ruaDest" placeholder="Nome da rua" required />
               </div>
               <Field label="Número *" name="numeroDest" placeholder="100" required />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
               <Field label="Complemento" name="complementoDest" placeholder="Apto, sala..." />
               <Field label="Bairro *" name="bairroDest" placeholder="Centro" required />
-            </div>
-            <div className="grid grid-cols-3 gap-2">
               <div className="col-span-2">
                 <Field label="Cidade *" name="cidadeDest" placeholder="São Paulo" required />
               </div>
               <Field label="UF *" name="ufDest" placeholder="SP" maxLength={2} required />
+              <Field label="CEP *" name="cepDest" placeholder="00000-000" inputMode="numeric" required />
             </div>
-            <Field label="CEP *" name="cepDest" placeholder="00000-000" inputMode="numeric" required />
-          </div>
+          </section>
         </div>
 
-        {/* col 3 — Nota Fiscal + submit */}
-        <div className="w-[300px] shrink-0 bg-white overflow-y-auto p-6 flex flex-col gap-4">
-          <ColHeader title="Nota Fiscal" />
+        {/* Coluna direita — Nota Fiscal + Ação + Resultado */}
+        <div className="w-[380px] shrink-0 bg-white overflow-y-auto flex flex-col">
+          <div className="flex-1 p-8 space-y-5">
+            <SectionTitle>Nota Fiscal</SectionTitle>
 
-          <div className="space-y-3 flex-1">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1.5">Tipo NF</label>
@@ -191,10 +167,10 @@ export default function NotfisFormDesktop() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1.5">Frete</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1.5">Condição frete</label>
                 <select name="condicaoFrete" className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] bg-[#F5F6FA]">
-                  <option value="CIF">CIF (remetente)</option>
-                  <option value="FOB">FOB (destinatário)</option>
+                  <option value="CIF">CIF — remetente paga</option>
+                  <option value="FOB">FOB — destinatário paga</option>
                 </select>
               </div>
             </div>
@@ -207,30 +183,58 @@ export default function NotfisFormDesktop() {
             </div>
 
             <Field label="Chave NF-e (44 dígitos)" name="chaveNFe" placeholder="Opcional" inputMode="numeric" maxLength={44} />
-            <Field label="Data emissão * (DD/MM/AAAA)" name="dataEmissao" placeholder="22/09/2026" required />
+            <Field label="Data de emissão * (DD/MM/AAAA)" name="dataEmissao" placeholder="22/09/2026" required />
 
             <div className="grid grid-cols-2 gap-3">
               <Field label="Volumes *" name="qtdeVolumes" type="number" placeholder="1" inputMode="numeric" min="1" required defaultValue="1" />
               <Field label="Peso real (kg) *" name="pesoReal" type="number" placeholder="0.0" inputMode="decimal" step="0.001" required />
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Valor merc. (R$) *" name="valorMercadoria" type="number" placeholder="0,00" inputMode="decimal" step="0.01" required />
+              <Field label="Valor mercadoria (R$) *" name="valorMercadoria" type="number" placeholder="0,00" inputMode="decimal" step="0.01" required />
               <Field label="Cubagem (m³)" name="cubagem" type="number" placeholder="Opcional" inputMode="decimal" step="0.0001" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Nº pedido" name="pedido" placeholder="Opcional" />
-              <Field label="Valor frete" name="valorFrete" type="number" placeholder="Opcional" inputMode="decimal" step="0.01" />
+              <Field label="Valor frete (R$)" name="valorFrete" type="number" placeholder="Opcional" inputMode="decimal" step="0.01" />
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#2EA3F2] text-white font-semibold py-3 rounded-xl disabled:opacity-50 hover:bg-blue-600 transition-colors mt-2"
-          >
-            {loading ? "Enviando…" : "Enviar NF-e →"}
-          </button>
+          {/* Área de ação e resultado — sticky no fundo */}
+          <div className="shrink-0 border-t border-gray-100 p-6 space-y-3">
+            {erro && (
+              <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">{erro}</div>
+            )}
+            {resultados && resultados.map((r, i) => (
+              <div key={i} className={`rounded-xl border p-4 ${r.sucesso ? "bg-emerald-50 border-emerald-100" : "bg-red-50 border-red-100"}`}>
+                <div className="flex items-center gap-2 mb-1">
+                  {r.sucesso
+                    ? <CheckCircle2 strokeWidth={1.5} className="w-4 h-4 text-emerald-600 shrink-0" />
+                    : <XCircle strokeWidth={1.5} className="w-4 h-4 text-red-500 shrink-0" />
+                  }
+                  <span className={`font-semibold text-sm ${r.sucesso ? "text-emerald-800" : "text-red-700"}`}>
+                    {r.sucesso ? "NF transmitida com sucesso" : `Falha — NF ${r.notaFiscal || "—"}`}
+                  </span>
+                </div>
+                <p className={`text-xs mt-1 ${r.sucesso ? "text-emerald-600" : "text-red-600"}`}>{r.mensagem}</p>
+                {r.protocolo && <p className="text-xs text-gray-400 mt-1.5 font-mono">Protocolo: {r.protocolo}</p>}
+              </div>
+            ))}
+            {!resultados && !erro && (
+              <div className="flex items-center gap-3 text-gray-400 px-1">
+                <FileText strokeWidth={1} className="w-5 h-5 shrink-0" />
+                <p className="text-sm">Preencha os dados e envie a NF-e</p>
+              </div>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#2EA3F2] text-white font-semibold py-3 rounded-xl disabled:opacity-50 hover:bg-blue-600 transition-colors"
+            >
+              {loading ? "Transmitindo…" : "Transmitir NF-e para SSW →"}
+            </button>
+          </div>
         </div>
+
       </form>
     </div>
   )
