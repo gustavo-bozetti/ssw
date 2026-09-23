@@ -116,7 +116,8 @@ export default function EntregaDetalhe({ id }: { id: string }) {
   return (
     <div className="min-h-screen bg-[#F3F3F3] pb-32 lg:pb-8">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4">
+        {/* Mobile header */}
+        <div className="lg:hidden max-w-lg mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <button onClick={() => router.back()} className="text-gray-500 p-1">
               <ChevronLeft strokeWidth={1.5} className="w-6 h-6" />
@@ -128,33 +129,45 @@ export default function EntregaDetalhe({ id }: { id: string }) {
             <StatusBadge status={entrega.status} large />
           </div>
         </div>
+        {/* Desktop header: breadcrumb + actions */}
+        <div className="hidden lg:flex items-center justify-between px-8 py-4">
+          <div className="flex items-center gap-2 text-sm">
+            <button
+              onClick={() => router.push("/entregas")}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              Entregas
+            </button>
+            <span className="text-gray-300">/</span>
+            <span className="font-semibold text-[#1F1F1F]">{entrega.nomeDestinatario}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <StatusBadge status={entrega.status} large />
+            <button
+              onClick={rastrear}
+              disabled={rastreando}
+              className="border border-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-xl hover:bg-gray-50 disabled:opacity-50 transition-colors"
+            >
+              {rastreando ? "…" : "Rastrear"}
+            </button>
+            <button
+              onClick={() => setShowAgendamento(true)}
+              className="bg-[#2EA3F2] text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-blue-600 transition-colors"
+            >
+              Agendar
+            </button>
+            <button
+              onClick={() => setShowOcorrencia(true)}
+              className="bg-[#FF6900] text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-orange-600 transition-colors"
+            >
+              Ocorrência
+            </button>
+          </div>
+        </div>
       </header>
 
-      {/* desktop action bar inline (below header) */}
-      <div className="hidden lg:flex max-w-none px-8 py-4 gap-3 bg-white border-b border-gray-100">
-        <button
-          onClick={rastrear}
-          disabled={rastreando}
-          className="border-2 border-[#2D3940] text-[#2D3940] font-semibold px-6 py-2.5 rounded-2xl text-sm disabled:opacity-50 hover:bg-gray-50"
-        >
-          {rastreando ? "…" : "Rastrear"}
-        </button>
-        <button
-          onClick={() => setShowAgendamento(true)}
-          className="bg-[#2EA3F2] text-white font-semibold px-6 py-2.5 rounded-2xl text-sm hover:bg-blue-600"
-        >
-          Agendar
-        </button>
-        <button
-          onClick={() => setShowOcorrencia(true)}
-          className="bg-[#FF6900] text-white font-semibold px-6 py-2.5 rounded-2xl text-sm hover:bg-orange-600"
-        >
-          Ocorrência
-        </button>
-      </div>
-
-      <main className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4 lg:py-6">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-6 lg:items-start space-y-3 lg:space-y-0">
+      <main className="max-w-lg lg:max-w-7xl mx-auto px-4 lg:px-8 py-4 lg:py-8">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start space-y-3 lg:space-y-0">
           {/* col 1: destinatário, carga, dados do pedido */}
           <div className="space-y-3">
             {entrega.mensagemSsw && (
@@ -203,7 +216,7 @@ export default function EntregaDetalhe({ id }: { id: string }) {
           {/* col 2: rastreamento, etiquetas */}
           <div className="space-y-3">
         {/* rastreamento */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm">
+        <div className="bg-white rounded-2xl p-4 lg:p-5 shadow-sm lg:shadow-none lg:border lg:border-gray-100">
           <div className="flex items-center justify-between mb-2">
             <p className="font-semibold text-[#1F1F1F]">Rastreamento SSW</p>
             <button
@@ -260,9 +273,9 @@ export default function EntregaDetalhe({ id }: { id: string }) {
 
         {/* etiquetas / NR */}
         {entrega.chaveNfe && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <div className="bg-white rounded-2xl p-4 lg:p-5 shadow-sm lg:shadow-none lg:border lg:border-gray-100">
             <div className="flex items-center justify-between mb-3">
-              <p className="font-semibold text-[#1F1F1F]">Etiqueta / NR</p>
+              <p className="font-semibold text-[#1F1F1F] lg:text-base">Etiqueta / NR</p>
               <button
                 onClick={async () => {
                   setCarregandoEtiqueta(true)
@@ -436,8 +449,8 @@ export default function EntregaDetalhe({ id }: { id: string }) {
 
 function InfoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4">
-      <p className="font-semibold text-[#1F1F1F] mb-3">{title}</p>
+    <div className="bg-white rounded-2xl shadow-sm lg:shadow-none lg:border lg:border-gray-100 p-4 lg:p-5">
+      <p className="font-semibold text-[#1F1F1F] mb-3 lg:text-base">{title}</p>
       <dl className="space-y-2">{children}</dl>
     </div>
   )

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Package, Plus, Search, Calculator, FileText, FileCheck, MapPin, ScrollText } from "lucide-react"
+import { Package, Plus, Search, Calculator, FileText, FileCheck, MapPin, ScrollText, Truck } from "lucide-react"
 
 const NAV = [
   { href: "/entregas",      icon: Package,     label: "Entregas" },
@@ -26,7 +26,8 @@ export default function Sidebar() {
 
   return (
     <aside className="hidden lg:flex flex-col w-60 min-h-screen bg-[#2D3940] shrink-0 fixed left-0 top-0 bottom-0 z-30">
-      <div className="px-5 py-5 border-b border-white/10">
+      <div className="px-5 py-5 border-b border-white/[0.06]">
+        <Truck strokeWidth={1} className="w-5 h-5 text-[#2EA3F2] mb-2" />
         <p className="text-white font-bold text-base leading-tight">Logística</p>
         <p className="text-white/40 text-xs mt-0.5">LE Serviços</p>
       </div>
@@ -44,7 +45,7 @@ export default function Sidebar() {
         </Group>
       </nav>
 
-      <div className="px-5 py-4 border-t border-white/10">
+      <div className="px-5 py-4 border-t border-white/[0.06]">
         <p className="text-white/30 text-xs">SSW Logística</p>
       </div>
     </aside>
@@ -77,7 +78,9 @@ function NavItem({
     <Link
       href={href}
       className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-        active ? "bg-white/15 text-white" : "text-white/60 hover:bg-white/8 hover:text-white/90"
+        active
+          ? "bg-white/[0.12] ring-1 ring-white/10 text-white"
+          : "text-white/60 hover:bg-white/10 hover:text-white/90"
       }`}
     >
       <Icon strokeWidth={1.5} className="w-[18px] h-[18px] shrink-0" />

@@ -63,16 +63,17 @@ export default function CotacaoForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F3F3F3] lg:bg-[#F5F6FA]">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
-          <Link href="/entregas" className="text-gray-500 text-sm">← Voltar</Link>
-          <h1 className="text-lg font-semibold text-gray-900">Simular Frete</h1>
+        <div className="max-w-lg lg:max-w-7xl mx-auto px-4 lg:px-8 py-4 lg:py-5 flex items-center gap-3">
+          <Link href="/entregas" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">← Entregas</Link>
+          <span className="hidden lg:inline text-gray-300">/</span>
+          <h1 className="text-lg lg:text-2xl font-bold text-gray-900">Simular Frete</h1>
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-6">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start space-y-5 lg:space-y-0">
+      <form onSubmit={handleSubmit} className="max-w-lg lg:max-w-5xl mx-auto px-4 lg:px-10 py-6">
+        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-8 lg:items-start space-y-5 lg:space-y-0">
           {/* left: inputs */}
           <div className="space-y-5">
             <section className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">

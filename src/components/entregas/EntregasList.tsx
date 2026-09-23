@@ -7,7 +7,7 @@ import { VEICULO_CONFIG } from "./config"
 import StatusBadge from "@/components/ui/StatusBadge"
 import DashboardHeader from "./DashboardHeader"
 import EntregaTable from "./EntregaTable"
-import { Package, Truck, CheckCircle2, ChevronRight } from "lucide-react"
+import { Package, Truck, CheckCircle2, ChevronRight, Plus } from "lucide-react"
 
 export default function EntregasList() {
   const router = useRouter()
@@ -20,27 +20,38 @@ export default function EntregasList() {
   return (
     <div className="min-h-screen bg-[#F3F3F3]">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4 flex items-center justify-between">
+        <div className="max-w-lg lg:max-w-7xl mx-auto px-4 lg:px-8 py-4 lg:py-5 flex items-center justify-between">
           <div>
             <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">LE Serviços</p>
-            <h1 className="text-xl font-bold text-[#1F1F1F]">Logística</h1>
+            <h1 className="text-xl lg:text-2xl font-bold text-[#1F1F1F]">Logística</h1>
           </div>
-          <div className="w-10 h-10 rounded-full bg-[#2EA3F2] flex items-center justify-center text-white font-bold text-sm">
-            LS
+          <div className="flex items-center gap-3">
+            <Link
+              href="/entregas/nova"
+              className="hidden lg:inline-flex items-center gap-2 bg-[#FF6900] text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-orange-600 transition-colors"
+            >
+              <Plus strokeWidth={2.5} className="w-4 h-4" />
+              Nova Entrega
+            </Link>
+            <div className="w-10 h-10 rounded-full bg-[#2EA3F2] flex items-center justify-center text-white font-bold text-sm lg:hidden">
+              LS
+            </div>
           </div>
         </div>
       </header>
 
       {/* desktop layout */}
-      <div className="hidden lg:block px-8 py-6">
-        <DashboardHeader entregas={entregas} />
-        {loading ? (
-          <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center text-gray-400">
-            Carregando…
-          </div>
-        ) : (
-          <EntregaTable entregas={entregas} onSelect={(e) => router.push(`/entregas/${e.id}`)} />
-        )}
+      <div className="hidden lg:block">
+        <div className="max-w-7xl mx-auto px-8 py-6 space-y-6">
+          <DashboardHeader entregas={entregas} />
+          {loading ? (
+            <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center text-gray-400">
+              Carregando…
+            </div>
+          ) : (
+            <EntregaTable entregas={entregas} onSelect={(e) => router.push(`/entregas/${e.id}`)} />
+          )}
+        </div>
       </div>
 
       {/* mobile layout */}
