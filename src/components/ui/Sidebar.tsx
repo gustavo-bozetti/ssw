@@ -25,7 +25,7 @@ export default function Sidebar() {
       : pathname.startsWith(href)
 
   return (
-    <aside className="hidden lg:flex flex-col w-60 min-h-screen bg-[#2D3940] shrink-0 fixed left-0 top-0 bottom-0 z-30">
+    <aside className="hidden lg:flex flex-col w-60 bg-[#2D3940] shrink-0 sticky top-0 h-screen z-30">
       <div className="px-5 py-5 border-b border-white/[0.06]">
         <Truck strokeWidth={1} className="w-5 h-5 text-[#2EA3F2] mb-2" />
         <p className="text-white font-bold text-base leading-tight">Logística</p>
