@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { X, CalendarClock } from "lucide-react"
 import type { Entrega } from "@/lib/storage/types"
+import { focusField } from "@/lib/focusField"
 
 interface Props {
   entrega: Entrega
@@ -33,12 +34,18 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!data || !horaInicio || !horaFim) {
+    if (!data) {
+      setErro("Informe a data do agendamento")
+      focusField("dataAgendamento")
+      return
+    }
+    if (!horaInicio || !horaFim) {
       setErro("Preencha todos os campos obrigatórios")
       return
     }
     if (horaInicio >= horaFim) {
       setErro("Horário de início deve ser antes do fim")
+      focusField("horaAgendamentoFim")
       return
     }
     setErro(null)
@@ -107,6 +114,7 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-[#2D3940]">Data do agendamento *</label>
           <input
+            id="dataAgendamento"
             type="date"
             value={data}
             min={toDateInput(new Date())}
@@ -131,6 +139,7 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-[#2D3940]">Fim *</label>
             <input
+              id="horaAgendamentoFim"
               type="time"
               value={horaFim}
               onChange={(e) => setHoraFim(e.target.value)}

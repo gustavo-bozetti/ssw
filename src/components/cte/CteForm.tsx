@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
+import { focusField } from "@/lib/focusField"
 
 export default function CteForm() {
   const router = useRouter()
@@ -35,6 +36,11 @@ export default function CteForm() {
   }
 
   async function enviar() {
+    if (!placaColeta) { setErro("Placa da coleta é obrigatória"); focusField("placaColeta"); return }
+    if (!codigoMercadoria) { setErro("Código de mercadoria é obrigatório"); focusField("codigoMercadoria"); return }
+    if (!codigoEspecie) { setErro("Código de espécie é obrigatório"); focusField("codigoEspecie"); return }
+    if (!codigoConferente) { setErro("Código de conferente é obrigatório"); focusField("codigoConferente"); return }
+    if (!xmlBase64) { setErro("Selecione o arquivo XML do CT-e"); focusField("xmlUpload"); return }
     setLoading(true)
     setResultado(null)
     setErro(null)
@@ -86,6 +92,7 @@ export default function CteForm() {
             <div className="col-span-2">
               <label className="block text-sm text-gray-600 mb-1">Placa da coleta *</label>
               <input
+                id="placaColeta"
                 value={placaColeta}
                 onChange={(e) => setPlacaColeta(e.target.value.toUpperCase())}
                 placeholder="ABC1234"
@@ -97,6 +104,7 @@ export default function CteForm() {
             <div>
               <label className="block text-sm text-gray-600 mb-1">Cód. Mercadoria *</label>
               <input
+                id="codigoMercadoria"
                 value={codigoMercadoria}
                 onChange={(e) => setCodigoMercadoria(e.target.value)}
                 inputMode="numeric"
@@ -107,6 +115,7 @@ export default function CteForm() {
             <div>
               <label className="block text-sm text-gray-600 mb-1">Cód. Espécie *</label>
               <input
+                id="codigoEspecie"
                 value={codigoEspecie}
                 onChange={(e) => setCodigoEspecie(e.target.value)}
                 inputMode="numeric"
@@ -117,6 +126,7 @@ export default function CteForm() {
             <div>
               <label className="block text-sm text-gray-600 mb-1">Cód. Conferente *</label>
               <input
+                id="codigoConferente"
                 value={codigoConferente}
                 onChange={(e) => setCodigoConferente(e.target.value)}
                 inputMode="numeric"
@@ -189,6 +199,7 @@ export default function CteForm() {
               className="hidden"
             />
             <button
+              id="xmlUpload"
               onClick={() => fileRef.current?.click()}
               className={`w-full border-2 border-dashed rounded-lg py-4 text-sm transition-colors ${
                 xmlBase64 ? "border-green-400 text-green-700 bg-green-50" : "border-gray-300 text-gray-500"

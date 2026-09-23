@@ -4,6 +4,7 @@ import { useState, useRef } from "react"
 import { CODIGOS_OCORRENCIA } from "@/lib/ssw/ocorrencias"
 import type { Entrega } from "@/lib/storage/types"
 import { Camera, X, MapPin } from "lucide-react"
+import { focusField } from "@/lib/focusField"
 
 interface Props {
   entrega: Entrega
@@ -61,6 +62,7 @@ export default function OcorrenciaForm({ entrega, onClose, onSuccess }: Props) {
     if (!codigoSelecionado || !codigo) return
     if (codigo.requiresAgendamento && !agendamento) {
       setErro("Informe a data/hora do agendamento")
+      focusField("agendamento")
       return
     }
     setErro(null)
@@ -199,6 +201,7 @@ export default function OcorrenciaForm({ entrega, onClose, onSuccess }: Props) {
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Data/hora do agendamento *</label>
                 <input
+                  id="agendamento"
                   type="datetime-local"
                   value={agendamento}
                   onChange={(e) => setAgendamento(e.target.value)}

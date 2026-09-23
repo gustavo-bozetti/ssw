@@ -9,6 +9,7 @@ import StepBar from "@/components/ui/StepBar"
 import Button from "@/components/ui/Button"
 import { Field, SelectField } from "@/components/ui/Field"
 import { ChevronLeft, Loader2, CalendarClock } from "lucide-react"
+import { focusField } from "@/lib/focusField"
 
 function defaultLimiteColeta() {
   const d = new Date()
@@ -90,33 +91,33 @@ export default function EntregaForm() {
     setDados((prev) => ({ ...prev, [key]: value }))
   }
 
-  function validarStep(): string | null {
+  function validarStep(): { msg: string; fieldId: string } | null {
     if (step === 1) {
-      if (!dados.nomeDestinatario.trim()) return "Nome do destinatário é obrigatório"
+      if (!dados.nomeDestinatario.trim()) return { msg: "Nome do destinatário é obrigatório", fieldId: "nomeDestinatario" }
       const cep = dados.cepEntrega.replace(/\D/g, "")
-      if (!cep) return "CEP é obrigatório"
-      if (cep.length !== 8) return "CEP deve ter 8 dígitos"
+      if (!cep) return { msg: "CEP é obrigatório", fieldId: "cepEntrega" }
+      if (cep.length !== 8) return { msg: "CEP deve ter 8 dígitos", fieldId: "cepEntrega" }
       if (dados.cnpjDestinatario) {
         const cnpj = dados.cnpjDestinatario.replace(/\D/g, "")
-        if (cnpj.length !== 14) return "CNPJ do destinatário deve ter 14 dígitos"
+        if (cnpj.length !== 14) return { msg: "CNPJ do destinatário deve ter 14 dígitos", fieldId: "cnpjDestinatario" }
       }
       if (dados.cpfDestinatario) {
         const cpf = dados.cpfDestinatario.replace(/\D/g, "")
-        if (cpf.length !== 11) return "CPF do destinatário deve ter 11 dígitos"
+        if (cpf.length !== 11) return { msg: "CPF do destinatário deve ter 11 dígitos", fieldId: "cpfDestinatario" }
       }
     }
     if (step === 2) {
-      if (!dados.peso || Number(dados.peso) <= 0) return "Peso é obrigatório"
-      if (!dados.quantidade || Number(dados.quantidade) < 1) return "Volumes é obrigatório"
+      if (!dados.peso || Number(dados.peso) <= 0) return { msg: "Peso é obrigatório", fieldId: "peso" }
+      if (!dados.quantidade || Number(dados.quantidade) < 1) return { msg: "Volumes é obrigatório", fieldId: "quantidade" }
       const v = VEICULO_CONFIG[dados.tipoVeiculo]
-      if (v.pesoMax && Number(dados.peso) > v.pesoMax) return `Peso máximo para ${v.label}: ${v.pesoMax} kg`
-      if (v.qtdMax && Number(dados.quantidade) > v.qtdMax) return `Volume máximo para ${v.label}: ${v.qtdMax}`
+      if (v.pesoMax && Number(dados.peso) > v.pesoMax) return { msg: `Peso máximo para ${v.label}: ${v.pesoMax} kg`, fieldId: "peso" }
+      if (v.qtdMax && Number(dados.quantidade) > v.qtdMax) return { msg: `Volume máximo para ${v.label}: ${v.qtdMax}`, fieldId: "quantidade" }
     }
     if (step === 3) {
-      if (!dados.limiteColeta) return "Data limite de coleta é obrigatória"
-      if (new Date(dados.limiteColeta) <= new Date()) return "Data limite deve ser no futuro"
-      if (!dados.solicitante.trim()) return "Solicitante é obrigatório"
-      if (dados.chaveNfe && dados.chaveNfe.replace(/\D/g, "").length !== 44) return "Chave NF-e deve ter 44 dígitos"
+      if (!dados.limiteColeta) return { msg: "Data limite de coleta é obrigatória", fieldId: "limiteColeta" }
+      if (new Date(dados.limiteColeta) <= new Date()) return { msg: "Data limite deve ser no futuro", fieldId: "limiteColeta" }
+      if (!dados.solicitante.trim()) return { msg: "Solicitante é obrigatório", fieldId: "solicitante" }
+      if (dados.chaveNfe && dados.chaveNfe.replace(/\D/g, "").length !== 44) return { msg: "Chave NF-e deve ter 44 dígitos", fieldId: "chaveNfe" }
     }
     return null
   }
@@ -140,14 +141,14 @@ export default function EntregaForm() {
 
   function avancar() {
     const err = validarStep()
-    if (err) { setErro(err); return }
+    if (err) { setErro(err.msg); focusField(err.fieldId); return }
     setErro(null)
     setStep((s) => s + 1)
   }
 
   async function handleSubmit() {
     const err = validarStep()
-    if (err) { setErro(err); return }
+    if (err) { setErro(err.msg); focusField(err.fieldId); return }
     setErro(null)
     setSubmitting(true)
 
