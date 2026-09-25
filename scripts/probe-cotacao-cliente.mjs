@@ -1,6 +1,6 @@
-// Sonda o webservice sswCotacaoCliente (cotação feita pelo cliente da transportadora).
-// Objetivo: descobrir se a LE consegue usá-lo e se existe senha de cliente (opção 383).
-//   node scripts/probe-cotacao-cliente.mjs [cnpjPagador] [senhaPagador]
+// Sonda o webservice sswCotacaoCliente direto no SSW (sem passar pela nossa API).
+// Use para validar uma senha de cliente da opção 383 assim que a LE cadastrar uma.
+//   node scripts/probe-cotacao-cliente.mjs <cnpjPagador> <senhaPagador>
 import { readFileSync } from "node:fs"
 
 const WSDL = "https://ssw.inf.br/ws/sswCotacaoCliente/index.php?wsdl"
