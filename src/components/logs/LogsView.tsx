@@ -61,14 +61,14 @@ export default function LogsView() {
   )
 
   return (
-    <div className="min-h-screen bg-[#F3F3F3] pb-24">
+    <div className="min-h-screen bg-surface pb-24">
       {/* header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="text-gray-500 p-1">
             <ChevronLeft strokeWidth={1.5} className="w-6 h-6" />
           </button>
-          <h1 className="text-base font-bold text-[#1F1F1F] flex-1">Logs SSW</h1>
+          <h1 className="text-base font-bold text-ink flex-1">Logs SSW</h1>
           <button
             onClick={clearLogs}
             className="text-gray-400 p-1 active:text-red-500"
@@ -79,7 +79,7 @@ export default function LogsView() {
           <button
             onClick={fetchLogs}
             disabled={loading}
-            className="text-[#2EA3F2] p-1 disabled:opacity-50"
+            className="text-primary p-1 disabled:opacity-50"
             title="Atualizar"
           >
             <RefreshCw strokeWidth={1.5} className={`w-5 h-5 ${loading ? "animate-spin" : ""}`} />
@@ -97,7 +97,7 @@ export default function LogsView() {
                   ? f === "error" ? "bg-red-500 text-white border-red-500"
                   : f === "warn"  ? "bg-amber-400 text-white border-amber-400"
                   : f === "info"  ? "bg-blue-500 text-white border-blue-500"
-                  : "bg-[#2D3940] text-white border-[#2D3940]"
+                  : "bg-navy text-white border-navy"
                   : "bg-white text-gray-500 border-gray-200"
               }`}
             >

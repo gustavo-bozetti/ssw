@@ -86,20 +86,20 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center">
-        <Loader2 strokeWidth={1.5} className="w-8 h-8 text-[#2EA3F2] animate-spin" />
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <Loader2 strokeWidth={1.5} className="w-8 h-8 text-primary animate-spin" />
       </div>
     )
   }
 
   if (!entrega) {
     return (
-      <div className="min-h-screen bg-[#F5F6FA] flex flex-col items-center justify-center gap-3">
+      <div className="min-h-screen bg-surface flex flex-col items-center justify-center gap-3">
         <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center">
           <AlertCircle strokeWidth={1} className="w-8 h-8 text-gray-300" />
         </div>
         <p className="text-gray-500 font-medium">Entrega não encontrada</p>
-        <button onClick={() => router.push("/entregas")} className="text-[#2EA3F2] text-sm font-medium hover:underline">
+        <button onClick={() => router.push("/entregas")} className="text-primary text-sm font-medium hover:underline">
           Voltar à lista
         </button>
       </div>
@@ -109,7 +109,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
   const v = VEICULO_CONFIG[entrega.tipoVeiculo]
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA]">
+    <div className="min-h-screen bg-surface">
       {/* header */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-10">
         <div className="px-8 py-4 flex items-center gap-4">
@@ -118,8 +118,8 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
             Voltar
           </button>
           <div className="h-4 w-px bg-gray-200" />
-          <v.Icon strokeWidth={1.5} className="w-5 h-5 text-[#2D3940]" />
-          <span className="text-base font-bold text-[#1F1F1F]">Detalhe da Entrega</span>
+          <v.Icon strokeWidth={1.5} className="w-5 h-5 text-navy" />
+          <span className="text-base font-bold text-ink">Detalhe da Entrega</span>
           {entrega.numeroColeta && (
             <span className="font-mono text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
               #{entrega.numeroColeta}
@@ -182,7 +182,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
           {entrega.chaveNfe && (
             <div className="bg-white rounded-2xl p-5 border border-gray-100">
               <div className="flex items-center justify-between mb-3">
-                <p className="font-semibold text-[#1F1F1F]">Etiqueta / NR</p>
+                <p className="font-semibold text-ink">Etiqueta / NR</p>
                 <button
                   onClick={async () => {
                     setCarregandoEtiqueta(true)
@@ -193,7 +193,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
                     } finally { setCarregandoEtiqueta(false) }
                   }}
                   disabled={carregandoEtiqueta}
-                  className="text-sm text-[#2EA3F2] font-semibold hover:underline disabled:opacity-50"
+                  className="text-sm text-primary font-semibold hover:underline disabled:opacity-50"
                 >
                   {carregandoEtiqueta ? "Consultando…" : "Consultar"}
                 </button>
@@ -202,7 +202,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
               {etiquetas !== null && etiquetas.length === 0 && <p className="text-sm text-gray-400">Nenhuma etiqueta encontrada</p>}
               {etiquetas && etiquetas.map((et, i) => (
                 <div key={i} className="border border-gray-100 rounded-xl p-3 space-y-1 text-sm mb-2">
-                  {et.numeroRastreamento && <p className="font-mono text-[#1F1F1F]">{et.numeroRastreamento}</p>}
+                  {et.numeroRastreamento && <p className="font-mono text-ink">{et.numeroRastreamento}</p>}
                   {et.dataPrevisaoEntrega && <p className="text-gray-500">Previsão: {et.dataPrevisaoEntrega}</p>}
                   {et.peso && <p className="text-gray-500">{et.peso} kg · vol {et.volume}</p>}
                   {et.qrCode && <p className="text-xs text-gray-400 font-mono break-all">QR: {et.qrCode.numeroRastreamento}</p>}
@@ -213,7 +213,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
                   <p className="text-xs text-gray-500 mb-2">Formato de impressão</p>
                   <div className="flex gap-2 mb-2">
                     {(["ZPL", "EPL", "PPLA"] as const).map((f) => (
-                      <button key={f} onClick={() => setTipoImp(f)} className={`px-4 py-2 text-xs font-semibold rounded-xl border-2 transition-colors ${tipoImp === f ? "border-[#2EA3F2] bg-[#2EA3F2] text-white" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}>{f}</button>
+                      <button key={f} onClick={() => setTipoImp(f)} className={`px-4 py-2 text-xs font-semibold rounded-xl border-2 transition-colors ${tipoImp === f ? "border-primary bg-primary text-white" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}>{f}</button>
                     ))}
                   </div>
                   <button
@@ -227,12 +227,12 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
                       } finally { setCarregandoImp(false) }
                     }}
                     disabled={carregandoImp}
-                    className="bg-[#2EA3F2] text-white rounded-xl px-5 py-2 text-sm font-semibold disabled:opacity-50 hover:bg-blue-500 transition-colors"
+                    className="bg-primary text-white rounded-xl px-5 py-2 text-sm font-semibold disabled:opacity-50 hover:bg-blue-500 transition-colors"
                   >
                     {carregandoImp ? "Gerando…" : `Gerar ${tipoImp}`}
                   </button>
                   {arquivoImp && (
-                    <a href={`data:text/plain;base64,${arquivoImp}`} download={`etiqueta.${tipoImp.toLowerCase()}`} className="ml-3 text-sm text-[#2EA3F2] font-semibold hover:underline">
+                    <a href={`data:text/plain;base64,${arquivoImp}`} download={`etiqueta.${tipoImp.toLowerCase()}`} className="ml-3 text-sm text-primary font-semibold hover:underline">
                       Baixar {tipoImp}
                     </a>
                   )}
@@ -261,13 +261,13 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
         <div className="w-[320px] shrink-0 space-y-4">
           <div className="bg-white rounded-2xl p-5 border border-gray-100">
             <div className="flex items-center justify-between mb-3">
-              <p className="font-semibold text-[#1F1F1F]">Rastreamento SSW</p>
-              <button onClick={rastrear} disabled={rastreando} className="text-sm text-[#2EA3F2] font-semibold hover:underline disabled:opacity-50">
+              <p className="font-semibold text-ink">Rastreamento SSW</p>
+              <button onClick={rastrear} disabled={rastreando} className="text-sm text-primary font-semibold hover:underline disabled:opacity-50">
                 {rastreando ? <Loader2 strokeWidth={1.5} className="w-4 h-4 animate-spin inline" /> : "Atualizar"}
               </button>
             </div>
             <label className="flex items-center gap-2 mb-3 cursor-pointer">
-              <div onClick={() => setAutoRefresh((v) => !v)} className={`w-9 h-5 rounded-full transition-colors relative shrink-0 cursor-pointer ${autoRefresh ? "bg-[#2EA3F2]" : "bg-gray-300"}`}>
+              <div onClick={() => setAutoRefresh((v) => !v)} className={`w-9 h-5 rounded-full transition-colors relative shrink-0 cursor-pointer ${autoRefresh ? "bg-primary" : "bg-gray-300"}`}>
                 <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${autoRefresh ? "translate-x-4" : "translate-x-0.5"}`} />
               </div>
               <span className="text-xs text-gray-500">Atualizar a cada 10 min</span>
@@ -280,11 +280,11 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
                 {eventos.map((ev, i) => (
                   <li key={i} className="flex gap-3 cursor-pointer hover:bg-gray-50 -mx-2 px-2 rounded-xl transition-colors" onClick={() => setEventoModal(ev)}>
                     <div className="flex flex-col items-center">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#2EA3F2] mt-1.5 shrink-0 ring-2 ring-blue-100" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary mt-1.5 shrink-0 ring-2 ring-blue-100" />
                       {i < eventos.length - 1 && <div className="w-px flex-1 bg-gray-200 mt-1" />}
                     </div>
                     <div className="pb-3 flex-1">
-                      <p className="text-sm font-semibold text-[#1F1F1F]">{ev.ocorrencia ?? ev.descricao}</p>
+                      <p className="text-sm font-semibold text-ink">{ev.ocorrencia ?? ev.descricao}</p>
                       {ev.descricao && ev.ocorrencia && <p className="text-xs text-gray-500">{ev.descricao}</p>}
                       <p className="text-xs text-gray-400 mt-0.5">{[ev.data, ev.hora, ev.cidade, ev.uf].filter(Boolean).join(" · ")}</p>
                     </div>
@@ -300,13 +300,13 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
             <button
               onClick={rastrear}
               disabled={rastreando}
-              className="w-full border-2 border-[#2D3940] text-[#2D3940] font-semibold py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="w-full border-2 border-navy text-navy font-semibold py-2.5 rounded-xl text-sm hover:bg-gray-50 transition-colors disabled:opacity-50"
             >
               {rastreando ? "Rastreando…" : "Rastrear agora"}
             </button>
             <button
               onClick={() => setShowAgendamento(true)}
-              className="w-full bg-[#2EA3F2] text-white font-semibold py-2.5 rounded-xl text-sm hover:bg-blue-500 transition-colors"
+              className="w-full bg-primary text-white font-semibold py-2.5 rounded-xl text-sm hover:bg-blue-500 transition-colors"
             >
               Agendar entrega
             </button>
@@ -331,7 +331,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-6" onClick={() => setEventoModal(null)}>
           <div className="bg-white rounded-2xl max-w-md w-full p-5 space-y-3" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
-              <p className="font-bold text-[#1F1F1F] text-base">{eventoModal.ocorrencia ?? eventoModal.descricao}</p>
+              <p className="font-bold text-ink text-base">{eventoModal.ocorrencia ?? eventoModal.descricao}</p>
               <button onClick={() => setEventoModal(null)} className="text-gray-400 hover:text-gray-600">
                 <X strokeWidth={1.5} className="w-5 h-5" />
               </button>
@@ -340,7 +340,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
               {Object.entries(eventoModal).filter(([, v]) => v !== undefined && v !== null && v !== "").map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-2 text-sm">
                   <dt className="text-gray-500 shrink-0 capitalize">{k}</dt>
-                  <dd className="text-[#1F1F1F] text-right break-all">{String(v)}</dd>
+                  <dd className="text-ink text-right break-all">{String(v)}</dd>
                 </div>
               ))}
             </dl>
@@ -354,7 +354,7 @@ export default function EntregaDetalheDesktop({ id }: { id: string }) {
 function InfoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-5">
-      <p className="font-semibold text-[#1F1F1F] mb-3">{title}</p>
+      <p className="font-semibold text-ink mb-3">{title}</p>
       <dl className="space-y-2">{children}</dl>
     </div>
   )
@@ -364,7 +364,7 @@ function Row({ label, value, mono }: { label: string; value: string; mono?: bool
   return (
     <div className="flex justify-between gap-2 text-sm">
       <dt className="text-gray-500 shrink-0">{label}</dt>
-      <dd className={`text-[#1F1F1F] text-right break-all ${mono ? "font-mono text-xs" : ""}`}>{value}</dd>
+      <dd className={`text-ink text-right break-all ${mono ? "font-mono text-xs" : ""}`}>{value}</dd>
     </div>
   )
 }

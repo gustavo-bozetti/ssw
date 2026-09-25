@@ -89,8 +89,8 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
       {/* header */}
       <header className="border-b border-gray-200 px-4 py-4 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
-          <CalendarClock strokeWidth={1.5} className="w-5 h-5 text-[#2EA3F2]" />
-          <h2 className="font-semibold text-[#1F1F1F]">Agendar Entrega</h2>
+          <CalendarClock strokeWidth={1.5} className="w-5 h-5 text-primary" />
+          <h2 className="font-semibold text-ink">Agendar Entrega</h2>
         </div>
         <button onClick={onClose} className="text-gray-400 p-1">
           <X strokeWidth={1.5} className="w-5 h-5" />
@@ -99,9 +99,9 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
 
       <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-4 py-5 space-y-5">
         {/* entrega referência */}
-        <div className="bg-[#F3F3F3] rounded-2xl px-4 py-3 space-y-1">
+        <div className="bg-surface rounded-2xl px-4 py-3 space-y-1">
           <p className="text-xs text-gray-500">Entrega</p>
-          <p className="text-sm font-semibold text-[#1F1F1F]">{entrega.nomeDestinatario}</p>
+          <p className="text-sm font-semibold text-ink">{entrega.nomeDestinatario}</p>
           {entrega.numeroColeta && (
             <p className="text-xs text-gray-400 font-mono">#{entrega.numeroColeta}</p>
           )}
@@ -112,7 +112,7 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
 
         {/* data */}
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[#2D3940]">Data do agendamento *</label>
+          <label className="text-sm font-medium text-navy">Data do agendamento *</label>
           <input
             id="dataAgendamento"
             type="date"
@@ -120,45 +120,45 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
             min={toDateInput(new Date())}
             onChange={(e) => setData(e.target.value)}
             required
-            className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-[#1F1F1F] bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]"
+            className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
         {/* horário */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[#2D3940]">Início *</label>
+            <label className="text-sm font-medium text-navy">Início *</label>
             <input
               type="time"
               value={horaInicio}
               onChange={(e) => setHoraInicio(e.target.value)}
               required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-[#1F1F1F] bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[#2D3940]">Fim *</label>
+            <label className="text-sm font-medium text-navy">Fim *</label>
             <input
               id="horaAgendamentoFim"
               type="time"
               value={horaFim}
               onChange={(e) => setHoraFim(e.target.value)}
               required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-[#1F1F1F] bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
 
         {/* observação */}
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[#2D3940]">Observação</label>
+          <label className="text-sm font-medium text-navy">Observação</label>
           <textarea
             value={obs}
             onChange={(e) => setObs(e.target.value)}
             rows={3}
             maxLength={160}
             placeholder="Ex: Ligar antes de chegar, entregar na portaria…"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1F1F1F] bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] resize-none"
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-primary resize-none"
           />
         </div>
 
@@ -174,7 +174,7 @@ export default function AgendamentoForm({ entrega, onClose, onSuccess }: Props) 
         <button
           onClick={handleSubmit}
           disabled={submitting}
-          className="w-full bg-[#2EA3F2] text-white font-semibold py-3.5 rounded-2xl disabled:opacity-40 active:bg-blue-600 transition-colors"
+          className="w-full bg-primary text-white font-semibold py-3.5 rounded-2xl disabled:opacity-40 active:bg-blue-600 transition-colors"
         >
           {submitting ? "Agendando…" : "Confirmar Agendamento"}
         </button>

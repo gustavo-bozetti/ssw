@@ -3,7 +3,7 @@ import { Clock, PackageCheck, Truck, CheckCircle2, XCircle } from "lucide-react"
 
 const CONFIG: Record<StatusEntrega, { label: string; dot: string; text: string; bg: string; Icon: React.ElementType }> = {
   CRIADA:      { label: "Criada",      dot: "bg-gray-400",      text: "text-gray-600",       bg: "bg-gray-100",       Icon: Clock         },
-  COLETADA:    { label: "Coletada",    dot: "bg-[#2EA3F2]",     text: "text-[#2EA3F2]",      bg: "bg-blue-50",        Icon: PackageCheck  },
+  COLETADA:    { label: "Coletada",    dot: "bg-primary",     text: "text-primary",      bg: "bg-blue-50",        Icon: PackageCheck  },
   EM_TRANSITO: { label: "Em trânsito", dot: "bg-[#FF6900]",     text: "text-[#FF6900]",      bg: "bg-orange-50",      Icon: Truck         },
   ENTREGUE:    { label: "Entregue",    dot: "bg-[#29C4A9]",     text: "text-[#29C4A9]",      bg: "bg-emerald-50",     Icon: CheckCircle2  },
   CANCELADA:   { label: "Cancelada",   dot: "bg-red-400",       text: "text-red-500",         bg: "bg-red-50",         Icon: XCircle       },

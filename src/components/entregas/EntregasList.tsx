@@ -14,14 +14,14 @@ export default function EntregasList() {
   const entregues = entregas.filter((e) => e.status === "ENTREGUE").length
 
   return (
-    <div className="min-h-screen bg-[#F3F3F3]">
+    <div className="min-h-screen bg-surface">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <p className="text-xs text-gray-400 font-medium uppercase tracking-widest">LE Serviços</p>
-            <h1 className="text-xl font-bold text-[#1F1F1F]">Logística</h1>
+            <h1 className="text-xl font-bold text-ink">Logística</h1>
           </div>
-          <div className="w-10 h-10 rounded-full bg-[#2EA3F2] flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
             LS
           </div>
         </div>
@@ -29,7 +29,7 @@ export default function EntregasList() {
 
       <main className="max-w-lg mx-auto px-4 py-4 space-y-4">
         {/* stats hero */}
-        <div className="bg-[#2D3940] rounded-2xl p-5">
+        <div className="bg-navy rounded-2xl p-5">
           <p className="text-xs text-gray-400 mb-3 uppercase tracking-wide">Resumo</p>
           <div className="grid grid-cols-3 gap-2">
             <Stat value={total} label="Total" Icon={Package} />
@@ -62,7 +62,7 @@ export default function EntregasList() {
               <Package strokeWidth={1} className="w-10 h-10 text-gray-300" />
             </div>
             <div className="text-center">
-              <p className="text-[#1F1F1F] font-semibold text-lg">Nenhuma entrega</p>
+              <p className="text-ink font-semibold text-lg">Nenhuma entrega</p>
               <p className="text-gray-500 text-sm mt-1">Toque em + para criar sua primeira</p>
             </div>
           </div>
@@ -82,12 +82,12 @@ export default function EntregasList() {
                 <Link key={e.id} href={`/entregas/${e.id}`} className="block">
                   <div className="bg-white rounded-2xl p-4 shadow-sm active:scale-[0.99] transition-transform">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-[#F3F3F3] flex items-center justify-center shrink-0">
-                        <v.Icon strokeWidth={1.5} className="w-6 h-6 text-[#2D3940]" />
+                      <div className="w-11 h-11 rounded-xl bg-surface flex items-center justify-center shrink-0">
+                        <v.Icon strokeWidth={1.5} className="w-6 h-6 text-navy" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="font-semibold text-[#1F1F1F] truncate">{e.nomeDestinatario}</p>
+                          <p className="font-semibold text-ink truncate">{e.nomeDestinatario}</p>
                           <StatusBadge status={e.status} />
                         </div>
                         <p className="text-sm text-gray-500 truncate mt-0.5">

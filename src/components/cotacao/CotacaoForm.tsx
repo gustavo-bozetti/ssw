@@ -63,7 +63,7 @@ export default function CotacaoForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F3F3F3] lg:bg-[#F5F6FA]">
+    <div className="min-h-screen bg-surface lg:bg-surface">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-lg lg:max-w-none mx-auto px-4 lg:px-8 py-4 lg:py-5 flex items-center gap-3">
           <Link href="/entregas" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">← Entregas</Link>

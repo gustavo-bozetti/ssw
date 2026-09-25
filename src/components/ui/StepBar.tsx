@@ -5,9 +5,9 @@ export default function StepBar({ steps, current }: { steps: number; current: nu
         <div key={i} className="flex items-center flex-1 last:flex-none">
           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all ${
             i < current
-              ? "bg-[#2EA3F2] text-white"
+              ? "bg-primary text-white"
               : i === current
-              ? "bg-[#2EA3F2] text-white ring-4 ring-blue-100"
+              ? "bg-primary text-white ring-4 ring-blue-100"
               : "bg-gray-200 text-gray-400"
           }`}>
             {i < current ? (
@@ -19,7 +19,7 @@ export default function StepBar({ steps, current }: { steps: number; current: nu
             )}
           </div>
           {i < steps - 1 && (
-            <div className={`flex-1 h-0.5 mx-1 transition-all ${i < current ? "bg-[#2EA3F2]" : "bg-gray-200"}`} />
+            <div className={`flex-1 h-0.5 mx-1 transition-all ${i < current ? "bg-primary" : "bg-gray-200"}`} />
           )}
         </div>
       ))}

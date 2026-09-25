@@ -253,7 +253,7 @@ export default function OcorrenciaForm({ entrega, onClose, onSuccess }: Props) {
               <button
                 type="button"
                 onClick={capturarGPS}
-                className="text-sm text-[#2EA3F2] font-medium flex items-center gap-1.5"
+                className="text-sm text-primary font-medium flex items-center gap-1.5"
               >
                 <MapPin strokeWidth={1.5} className="w-4 h-4 shrink-0" />
                 {coords

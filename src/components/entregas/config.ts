@@ -15,7 +15,7 @@ export const STATUS_CONFIG: Record<
   { label: string; color: string }
 > = {
   CRIADA:      { label: "Criada",      color: "bg-gray-100 text-gray-700"           },
-  COLETADA:    { label: "Coletada",    color: "bg-blue-50 text-[#2EA3F2]"           },
+  COLETADA:    { label: "Coletada",    color: "bg-blue-50 text-primary"           },
   EM_TRANSITO: { label: "Em trânsito", color: "bg-orange-50 text-[#FF6900]"         },
   ENTREGUE:    { label: "Entregue",    color: "bg-emerald-50 text-[#29C4A9]"        },
   CANCELADA:   { label: "Cancelada",   color: "bg-red-50 text-red-500"              },

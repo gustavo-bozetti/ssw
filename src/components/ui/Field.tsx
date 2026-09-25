@@ -11,12 +11,12 @@ interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
 export function Field({ label, name, errorMessage, className = "", ...props }: FieldProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={name} className="text-sm font-medium text-[#2D3940]">{label}</label>
+      <label htmlFor={name} className="text-sm font-medium text-navy">{label}</label>
       <input
         id={name}
         name={name}
         {...props}
-        className={`border border-gray-200 rounded-xl px-4 py-3.5 text-[#1F1F1F] text-sm bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] focus:border-transparent transition-all ${errorMessage ? "border-red-400 focus:ring-red-400" : ""} ${className}`}
+        className={`border border-gray-200 rounded-xl px-4 py-3.5 text-ink text-sm bg-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${errorMessage ? "border-red-400 focus:ring-red-400" : ""} ${className}`}
       />
       {errorMessage && <p className="text-xs text-red-500">{errorMessage}</p>}
     </div>
@@ -32,12 +32,12 @@ interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
 export function SelectField({ label, name, errorMessage, className = "", children, ...props }: SelectFieldProps) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={name} className="text-sm font-medium text-[#2D3940]">{label}</label>
+      <label htmlFor={name} className="text-sm font-medium text-navy">{label}</label>
       <select
         id={name}
         name={name}
         {...props}
-        className={`border border-gray-200 rounded-xl px-4 py-3.5 text-[#1F1F1F] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2] focus:border-transparent transition-all ${className}`}
+        className={`border border-gray-200 rounded-xl px-4 py-3.5 text-ink text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${className}`}
       >
         {children}
       </select>

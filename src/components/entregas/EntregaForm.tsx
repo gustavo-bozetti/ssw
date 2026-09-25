@@ -232,7 +232,7 @@ export default function EntregaForm() {
   const v = VEICULO_CONFIG[dados.tipoVeiculo]
 
   return (
-    <div className="min-h-screen bg-[#F3F3F3] flex flex-col">
+    <div className="min-h-screen bg-surface flex flex-col">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center gap-3">
           <button onClick={() => step > 0 ? setStep((s) => s - 1) : router.back()} className="text-gray-500 p-1">
@@ -240,7 +240,7 @@ export default function EntregaForm() {
           </button>
           <div>
             <p className="text-xs text-gray-400">Etapa {step + 1} de {STEPS.length}</p>
-            <h1 className="text-base font-bold text-[#1F1F1F]">{STEPS[step]}</h1>
+            <h1 className="text-base font-bold text-ink">{STEPS[step]}</h1>
           </div>
         </div>
         <StepBar steps={STEPS.length} current={step} />
@@ -250,25 +250,25 @@ export default function EntregaForm() {
         {/* STEP 0 — Veículo */}
         {step === 0 && (
           <div className="space-y-3">
-            <h2 className="text-xl font-bold text-[#1F1F1F] mb-5">Que tipo de veículo?</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">Que tipo de veículo?</h2>
             {(Object.keys(VEICULO_CONFIG) as TipoVeiculo[]).map((tipo) => {
               const cfg = VEICULO_CONFIG[tipo]
               const ativo = dados.tipoVeiculo === tipo
               return (
                 <button key={tipo} type="button" onClick={() => { set("tipoVeiculo", tipo); setErro(null); setStep(1) }}
-                  className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all active:scale-[0.99] ${ativo ? "border-[#2EA3F2] bg-blue-50" : "border-transparent bg-white shadow-sm"}`}>
-                  <span className="w-12 h-12 rounded-xl bg-[#F3F3F3] flex items-center justify-center shrink-0">
-                    <cfg.Icon strokeWidth={1.5} className="w-8 h-8 text-[#2D3940]" />
+                  className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all active:scale-[0.99] ${ativo ? "border-primary bg-blue-50" : "border-transparent bg-white shadow-sm"}`}>
+                  <span className="w-12 h-12 rounded-xl bg-surface flex items-center justify-center shrink-0">
+                    <cfg.Icon strokeWidth={1.5} className="w-8 h-8 text-navy" />
                   </span>
                   <div className="text-left flex-1">
-                    <p className={`font-semibold text-base ${ativo ? "text-[#2EA3F2]" : "text-[#1F1F1F]"}`}>{cfg.label}</p>
+                    <p className={`font-semibold text-base ${ativo ? "text-primary" : "text-ink"}`}>{cfg.label}</p>
                     <p className="text-sm text-gray-500">
                       {cfg.pesoMax ? `até ${cfg.pesoMax} kg` : "sem limite de peso"}
                       {cfg.qtdMax ? ` · ${cfg.qtdMax} vol.` : ""}
                     </p>
                   </div>
                   {ativo && (
-                    <div className="w-6 h-6 rounded-full bg-[#2EA3F2] flex items-center justify-center shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
                       <svg viewBox="0 0 20 20" fill="white" className="w-4 h-4">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -283,11 +283,11 @@ export default function EntregaForm() {
         {/* STEP 1 — Destinatário */}
         {step === 1 && (
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-[#1F1F1F] mb-5">Para quem vai?</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">Para quem vai?</h2>
             <Field label="Nome do destinatário *" name="nomeDestinatario" placeholder="Nome completo ou empresa" value={dados.nomeDestinatario} onChange={(e) => set("nomeDestinatario", e.target.value)} />
             <div className="relative">
               <Field label="CEP de entrega *" name="cepEntrega" placeholder="00000-000" inputMode="numeric" maxLength={9} value={dados.cepEntrega} onChange={(e) => { set("cepEntrega", e.target.value); buscarCep(e.target.value) }} />
-              {buscandoCep && <Loader2 strokeWidth={1.5} className="absolute right-4 top-9 w-4 h-4 text-[#2EA3F2] animate-spin" />}
+              {buscandoCep && <Loader2 strokeWidth={1.5} className="absolute right-4 top-9 w-4 h-4 text-primary animate-spin" />}
             </div>
             <Field label="Endereço completo" name="enderecoEntrega" placeholder="Rua, número, bairro — preenchido pelo CEP" value={dados.enderecoEntrega} onChange={(e) => set("enderecoEntrega", e.target.value)} />
             <Field label="CNPJ do destinatário" name="cnpjDestinatario" placeholder="00.000.000/0001-00" inputMode="numeric" value={dados.cnpjDestinatario} onChange={(e) => set("cnpjDestinatario", e.target.value)} />
@@ -298,7 +298,7 @@ export default function EntregaForm() {
         {/* STEP 2 — Carga */}
         {step === 2 && (
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-[#1F1F1F] mb-5">O que vai?</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">O que vai?</h2>
             <div className="grid grid-cols-2 gap-3">
               <Field label={`Peso (kg) *${v.pesoMax ? ` — máx ${v.pesoMax}` : ""}`} name="peso" type="number" placeholder="0.0" inputMode="decimal" step="0.1" min="0.1" max={v.pesoMax?.toString()} value={dados.peso} onChange={(e) => set("peso", e.target.value)} />
               <Field label={`Volumes *${v.qtdMax ? ` — máx ${v.qtdMax}` : ""}`} name="quantidade" type="number" placeholder="1" inputMode="numeric" min="1" max={v.qtdMax?.toString()} value={dados.quantidade} onChange={(e) => set("quantidade", e.target.value)} />
@@ -314,10 +314,10 @@ export default function EntregaForm() {
         {/* STEP 3 — Detalhes */}
         {step === 3 && (
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-[#1F1F1F] mb-5">Finalizando</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">Finalizando</h2>
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="limiteColeta" className="text-sm font-medium text-[#2D3940]">Data limite coleta *</label>
-              <input id="limiteColeta" type="datetime-local" value={dados.limiteColeta} onChange={(e) => set("limiteColeta", e.target.value)} className="border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-[#1F1F1F] bg-white focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]" />
+              <label htmlFor="limiteColeta" className="text-sm font-medium text-navy">Data limite coleta *</label>
+              <input id="limiteColeta" type="datetime-local" value={dados.limiteColeta} onChange={(e) => set("limiteColeta", e.target.value)} className="border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-ink bg-white focus:outline-none focus:ring-2 focus:ring-primary" />
             </div>
             <SelectField label="Pagamento do frete" name="tipoPagamento" value={dados.tipoPagamento} onChange={(e) => set("tipoPagamento", e.target.value as "O" | "D")}>
               <option value="O">Pago na origem (remetente)</option>
@@ -341,22 +341,22 @@ export default function EntregaForm() {
             <Field label="Observação (máx 160)" name="observacao" placeholder="Para a transportadora" maxLength={160} value={dados.observacao} onChange={(e) => set("observacao", e.target.value)} />
             <Field label="Instrução (máx 80)" name="instrucao" placeholder="Instruções especiais" maxLength={80} value={dados.instrucao} onChange={(e) => set("instrucao", e.target.value)} />
             <label className="flex items-center gap-3 bg-white rounded-2xl p-4 active:bg-gray-50">
-              <div className={`w-12 h-6 rounded-full transition-colors relative ${dados.reversa ? "bg-[#2EA3F2]" : "bg-gray-300"}`} onClick={() => set("reversa", !dados.reversa)}>
+              <div className={`w-12 h-6 rounded-full transition-colors relative ${dados.reversa ? "bg-primary" : "bg-gray-300"}`} onClick={() => set("reversa", !dados.reversa)}>
                 <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${dados.reversa ? "translate-x-6" : "translate-x-0.5"}`} />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#1F1F1F]">Coleta reversa</p>
+                <p className="text-sm font-semibold text-ink">Coleta reversa</p>
                 <p className="text-xs text-gray-500">Produto sendo devolvido</p>
               </div>
             </label>
             <div className="bg-white rounded-2xl overflow-hidden">
               <button type="button" onClick={() => set("agendarEntrega", !dados.agendarEntrega)} className="w-full flex items-center gap-3 p-4 active:bg-gray-50">
-                <div className={`w-12 h-6 rounded-full transition-colors relative shrink-0 ${dados.agendarEntrega ? "bg-[#2EA3F2]" : "bg-gray-300"}`}>
+                <div className={`w-12 h-6 rounded-full transition-colors relative shrink-0 ${dados.agendarEntrega ? "bg-primary" : "bg-gray-300"}`}>
                   <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${dados.agendarEntrega ? "translate-x-6" : "translate-x-0.5"}`} />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-[#1F1F1F] flex items-center gap-1.5">
-                    <CalendarClock strokeWidth={1.5} className="w-4 h-4 text-[#2EA3F2]" />
+                  <p className="text-sm font-semibold text-ink flex items-center gap-1.5">
+                    <CalendarClock strokeWidth={1.5} className="w-4 h-4 text-primary" />
                     Agendar entrega
                   </p>
                   <p className="text-xs text-gray-500">Definir janela de entrega ao destinatário</p>
@@ -365,22 +365,22 @@ export default function EntregaForm() {
               {dados.agendarEntrega && (
                 <div className="px-4 pb-4 space-y-3 border-t border-gray-100">
                   <div className="pt-3">
-                    <label className="text-sm font-medium text-[#2D3940] block mb-1.5">Data da entrega *</label>
-                    <input type="date" value={dados.dataAgendamento} min={new Date().toISOString().slice(0, 10)} onChange={(e) => set("dataAgendamento", e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1F1F1F] bg-[#F3F3F3] focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]" />
+                    <label className="text-sm font-medium text-navy block mb-1.5">Data da entrega *</label>
+                    <input type="date" value={dados.dataAgendamento} min={new Date().toISOString().slice(0, 10)} onChange={(e) => set("dataAgendamento", e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-ink bg-surface focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-sm font-medium text-[#2D3940] block mb-1.5">Início</label>
-                      <input type="time" value={dados.horaAgendamentoInicio} onChange={(e) => set("horaAgendamentoInicio", e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1F1F1F] bg-[#F3F3F3] focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]" />
+                      <label className="text-sm font-medium text-navy block mb-1.5">Início</label>
+                      <input type="time" value={dados.horaAgendamentoInicio} onChange={(e) => set("horaAgendamentoInicio", e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-ink bg-surface focus:outline-none focus:ring-2 focus:ring-primary" />
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-[#2D3940] block mb-1.5">Fim</label>
-                      <input type="time" value={dados.horaAgendamentoFim} onChange={(e) => set("horaAgendamentoFim", e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1F1F1F] bg-[#F3F3F3] focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]" />
+                      <label className="text-sm font-medium text-navy block mb-1.5">Fim</label>
+                      <input type="time" value={dados.horaAgendamentoFim} onChange={(e) => set("horaAgendamentoFim", e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-ink bg-surface focus:outline-none focus:ring-2 focus:ring-primary" />
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-[#2D3940] block mb-1.5">Observação</label>
-                    <input type="text" value={dados.obsAgendamento} onChange={(e) => set("obsAgendamento", e.target.value)} maxLength={160} placeholder="Ex: ligar antes, entregar na portaria…" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-[#1F1F1F] bg-[#F3F3F3] focus:outline-none focus:ring-2 focus:ring-[#2EA3F2]" />
+                    <label className="text-sm font-medium text-navy block mb-1.5">Observação</label>
+                    <input type="text" value={dados.obsAgendamento} onChange={(e) => set("obsAgendamento", e.target.value)} maxLength={160} placeholder="Ex: ligar antes, entregar na portaria…" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-ink bg-surface focus:outline-none focus:ring-2 focus:ring-primary" />
                   </div>
                 </div>
               )}
@@ -394,7 +394,7 @@ export default function EntregaForm() {
       </div>
 
       {step > 0 && (
-        <div className="sticky bottom-0 bg-[#F3F3F3] border-t border-gray-200 px-4 py-3 max-w-lg mx-auto w-full">
+        <div className="sticky bottom-0 bg-surface border-t border-gray-200 px-4 py-3 max-w-lg mx-auto w-full">
           {step < STEPS.length - 1 ? (
             <Button onClick={avancar}>Próximo →</Button>
           ) : (

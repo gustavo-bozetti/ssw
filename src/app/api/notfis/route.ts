@@ -8,7 +8,7 @@ const enderecoSchema = z.object({
   bairro: z.string().min(1).max(10),
   cidade: z.string().min(1),
   uf: z.string().length(2),
-  cep: z.coerce.number().int(),
+  cep: z.string().transform((v) => parseInt(v.replace(/\D/g, ""), 10)).pipe(z.number().int()),
 })
 
 const nfSchema = z.object({
@@ -29,7 +29,7 @@ const nfSchema = z.object({
 })
 
 const destinatarioSchema = z.object({
-  cnpj: z.string().min(11),
+  cnpj: z.string().transform((v) => v.replace(/\D/g, "")).pipe(z.string().min(11)),
   nome: z.string().min(1),
   inscr: z.string().optional(),
   telefone: z.string().optional(),
@@ -41,7 +41,7 @@ const destinatarioSchema = z.object({
 
 const schema = z.object({
   lote: z.string().optional(),
-  cnpjRemetente: z.string().min(11).optional(),
+  cnpjRemetente: z.string().transform((v) => v.replace(/\D/g, "")).pipe(z.string().min(11)).optional(),
   nomeRemetente: z.string().optional(),
   destinatarios: z.array(destinatarioSchema).min(1),
 })

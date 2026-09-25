@@ -3,8 +3,8 @@ import { z } from "zod"
 
 const schema = z.object({
   cnpjPagador: z.string().min(11).max(18),
-  cepOrigem: z.coerce.number().int(),
-  cepDestino: z.coerce.number().int(),
+  cepOrigem: z.string().transform((v) => parseInt(v.replace(/\D/g, ""), 10)).pipe(z.number().int()),
+  cepDestino: z.string().transform((v) => parseInt(v.replace(/\D/g, ""), 10)).pipe(z.number().int()),
   valorNF: z.coerce.number().positive(),
   quantidade: z.coerce.number().int().min(1),
   peso: z.coerce.number().positive().optional(),

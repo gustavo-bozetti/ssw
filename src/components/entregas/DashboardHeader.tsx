@@ -15,7 +15,7 @@ function StatRow({ label, value, color = "gray" }: { label: string; value: strin
         <span className={`w-2 h-2 rounded-full shrink-0 ${DOT[color] ?? DOT.gray}`} />
         <span className="text-sm text-gray-600">{label}</span>
       </div>
-      <span className="text-sm font-bold text-[#1F1F1F] tabular-nums">{value}</span>
+      <span className="text-sm font-bold text-ink tabular-nums">{value}</span>
     </div>
   )
 }
@@ -30,7 +30,7 @@ export default function DashboardHeader({ entregas }: { entregas: Entrega[] }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 p-4">
       <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Visão geral</p>
-      <p className="text-3xl font-bold text-[#1F1F1F] mb-3">{total}</p>
+      <p className="text-3xl font-bold text-ink mb-3">{total}</p>
       <div>
         <StatRow label="Em rota"    value={emRota}     color="blue"  />
         <StatRow label="Entregues"  value={entregues}  color="green" />

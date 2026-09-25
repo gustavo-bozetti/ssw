@@ -5,12 +5,22 @@
 }
 
 @theme {
-  --color-primary: #2EA3F2;
-  --color-primary-dark: #1E8BD9;
-  --color-navy: #2D3940;
-  --color-teal: #29C4A9;
-  --color-bg-app: #F3F3F3;
-  --color-ink: #1F1F1F;
-  --color-muted: #6B7280;
-  --color-orange: #FF6900;
+  /* Brand colors — Locall Express */
+  --color-primary:       #2982C4;
+  --color-primary-dark:  #1F6EA0;
+  --color-orange:        #E97E37;
+  --color-orange-dark:   #C85424;
+  --color-navy:          #2D3940;
+  --color-ink:           #050505;
+  --color-surface:       #FBFBFB;
+  --color-surface-hover: #F5F7FA;
+  --color-yellow:        #FFCE37;
+
+  /* Typography */
+  --font-display: var(--font-barlow), "Barlow", sans-serif;
+  --font-sans:    var(--font-heebo),  "Heebo",  sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
 }
