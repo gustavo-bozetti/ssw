@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { FileText, ExternalLink, Search, TrendingUp, Clock, AlertCircle } from "lucide-react"
+import { linkServico } from "@/lib/ssw/links"
+
+const linkReemissao = linkServico("reemissaoFatura")
 
 type FaturaStatus = "EMITIDA" | "LIQUIDADA" | "CANCELADA"
 
@@ -88,10 +91,10 @@ export default function FaturasDesktop() {
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto px-8 py-6 flex flex-col gap-5">
+      <div className="flex-1 min-h-0 overflow-hidden px-8 py-6 flex flex-col gap-5">
 
         {/* KPI cards */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-4 shrink-0">
           <div className="bg-white rounded-2xl border border-gray-100 px-6 py-5 flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
               <Clock strokeWidth={1.5} className="w-5 h-5 text-amber-500" />
@@ -136,9 +139,9 @@ export default function FaturasDesktop() {
         )}
 
         {!loading && (
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden flex flex-col">
+          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden flex flex-col flex-1 min-h-0">
             {/* toolbar */}
-            <div className="flex items-center gap-1 px-3 py-2 border-b border-gray-100">
+            <div className="flex items-center gap-1 px-3 py-2 border-b border-gray-100 shrink-0">
               <div className="flex items-center gap-0.5 flex-1">
                 {FILTERS.map((f) => {
                   const count = f.value === "TODAS"
@@ -187,9 +190,18 @@ export default function FaturasDesktop() {
             </div>
 
             {/* tabela */}
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
+            <div className="flex-1 min-h-0 overflow-y-auto">
+              <table className="w-full text-sm table-fixed">
+                <colgroup>
+                  <col className="w-[120px]" />
+                  <col />
+                  <col className="w-[110px]" />
+                  <col className="w-[140px]" />
+                  <col className="w-[140px]" />
+                  <col className="w-[130px]" />
+                  <col className="w-[110px]" />
+                </colgroup>
+                <thead className="sticky top-0 bg-white z-10">
                   <tr className="border-b border-gray-100">
                     <th className="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Nº Fatura</th>
                     <th className="px-5 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Devedor</th>
@@ -224,7 +236,7 @@ export default function FaturasDesktop() {
                         </td>
 
                         {/* devedor */}
-                        <td className="px-5 py-4 max-w-[240px]">
+                        <td className="px-5 py-4">
                           <p className="font-semibold text-ink truncate leading-tight">{f.nomeDevedor ?? "—"}</p>
                           {f.cnpjDevedor && (
                             <p className="text-xs text-gray-400 mt-0.5 font-mono truncate">{f.cnpjDevedor}</p>
@@ -239,8 +251,7 @@ export default function FaturasDesktop() {
                         {/* vencimento */}
                         <td className="px-5 py-4 whitespace-nowrap">
                           {atrasada ? (
-                            <span className="inline-flex items-center gap-1.5 bg-red-50 text-red-600 text-xs font-semibold px-2.5 py-1 rounded-full">
-                              <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+                            <span className="inline-flex items-center bg-red-50 text-red-600 text-xs font-semibold px-2.5 py-1 rounded-full tabular-nums whitespace-nowrap">
                               {fmtDate(f.dataVencimento)}
                             </span>
                           ) : (
@@ -255,8 +266,7 @@ export default function FaturasDesktop() {
 
                         {/* status */}
                         <td className="px-5 py-4">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.text}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${badge.dot}`} />
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${badge.bg} ${badge.text}`}>
                             {badge.label}
                           </span>
                         </td>
@@ -273,6 +283,17 @@ export default function FaturasDesktop() {
                               <ExternalLink className="w-3 h-3" />
                               Abrir
                             </a>
+                          ) : linkReemissao ? (
+                            <a
+                              href={linkReemissao}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title="O link do boleto não veio no webhook ou expirou — reemitir no SSW"
+                              className="inline-flex items-center gap-1.5 text-gray-400 hover:text-primary px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                            >
+                              <ExternalLink className="w-3 h-3" />
+                              Reemitir
+                            </a>
                           ) : (
                             <span className="text-gray-300 text-xs">—</span>
                           )}
@@ -285,7 +306,7 @@ export default function FaturasDesktop() {
             </div>
 
             {lista.length > 0 && (
-              <div className="px-5 py-3 border-t border-gray-100 text-xs text-gray-400 flex items-center justify-between">
+              <div className="px-5 py-3 border-t border-gray-100 text-xs text-gray-400 flex items-center justify-between shrink-0">
                 <span>{lista.length} {lista.length === 1 ? "fatura" : "faturas"}</span>
                 <span className="font-semibold text-ink tabular-nums">
                   Total: {fmtBRL(lista.reduce((s, f) => s + f.valorTotal, 0))}

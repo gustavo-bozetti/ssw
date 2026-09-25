@@ -1,15 +1,49 @@
 "use client"
 
 import { useState } from "react"
-import { Search } from "lucide-react"
+import { Search, Ban } from "lucide-react"
 import type { Entrega, StatusEntrega } from "@/lib/storage/types"
 
-const STATUS_BADGE: Record<StatusEntrega, { bg: string; text: string; dot: string; label: string }> = {
-  CRIADA:      { bg: "bg-amber-50",   text: "text-amber-700",   dot: "bg-amber-400",   label: "Pendente"   },
-  COLETADA:    { bg: "bg-blue-50",    text: "text-blue-700",    dot: "bg-blue-400",    label: "Coletada"   },
-  EM_TRANSITO: { bg: "bg-indigo-50",  text: "text-indigo-700",  dot: "bg-indigo-400",  label: "Em rota"    },
-  ENTREGUE:    { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-400", label: "Entregue"   },
-  CANCELADA:   { bg: "bg-red-50",     text: "text-red-700",     dot: "bg-red-400",     label: "Cancelada"  },
+const STATUS: Record<StatusEntrega, { dot: string; text: string; label: string }> = {
+  CRIADA:      { dot: "bg-amber-400",   text: "text-amber-700",   label: "Pendente"  },
+  COLETADA:    { dot: "bg-blue-400",    text: "text-blue-700",    label: "Coletada"  },
+  EM_TRANSITO: { dot: "bg-indigo-400",  text: "text-indigo-700",  label: "Em rota"   },
+  ENTREGUE:    { dot: "bg-emerald-400", text: "text-emerald-700", label: "Entregue"  },
+  CANCELADA:   { dot: "bg-red-400",     text: "text-red-600",     label: "Cancelada" },
+}
+
+/** Cancelada fica de fora: é saída do fluxo, não uma fase dele. */
+const FASES: StatusEntrega[] = ["CRIADA", "COLETADA", "EM_TRANSITO", "ENTREGUE"]
+
+function StatusProgresso({ status }: { status: StatusEntrega }) {
+  const { text, label, dot } = STATUS[status]
+
+  if (status === "CANCELADA") {
+    return (
+      <span className={`inline-flex items-center gap-2 text-xs font-medium ${text}`} title="Cancelada">
+        <Ban strokeWidth={2} className="w-3.5 h-3.5 shrink-0" />
+        {label}
+      </span>
+    )
+  }
+
+  const atual = FASES.indexOf(status)
+  return (
+    <span
+      className="inline-flex items-center gap-2"
+      title={`Fase ${atual + 1} de ${FASES.length} — ${label}`}
+    >
+      <span className="flex items-center gap-1 shrink-0">
+        {FASES.map((f, i) => (
+          <span
+            key={f}
+            className={`w-1.5 h-1.5 rounded-full transition-colors ${i <= atual ? dot : "bg-gray-200"}`}
+          />
+        ))}
+      </span>
+      <span className={`text-xs font-medium ${text}`}>{label}</span>
+    </span>
+  )
 }
 
 const FILTERS: { label: string; value: StatusEntrega | "TODOS" }[] = [
@@ -67,7 +101,7 @@ export default function EntregaTable({
               ? entregas.length
               : entregas.filter((e) => e.status === f.value).length
             const ativo = filtro === f.value
-            const badge = f.value !== "TODOS" ? STATUS_BADGE[f.value as StatusEntrega] : null
+            const badge = f.value !== "TODOS" ? STATUS[f.value as StatusEntrega] : null
             return (
               <button
                 key={f.value}
@@ -129,7 +163,6 @@ export default function EntregaTable({
               </tr>
             )}
             {lista.map((e) => {
-              const badge = STATUS_BADGE[e.status]
               return (
                 <tr
                   key={e.id}
@@ -144,10 +177,7 @@ export default function EntregaTable({
 
                   {/* status */}
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.text}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${badge.dot}`} />
-                      {badge.label}
-                    </span>
+                    <StatusProgresso status={e.status} />
                   </td>
 
                   {/* coleta SSW */}
